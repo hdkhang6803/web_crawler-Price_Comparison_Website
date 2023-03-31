@@ -2,9 +2,11 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import time
 
-web_url = 'https://fptshop.com.vn'
+web_url = 'https://fptshop.com.vn/'
 
 
 def get_list(input_string):
@@ -14,10 +16,14 @@ def get_list(input_string):
     #Navigate to link
     browser.get(web_url)
     #browser.maximize_window()
-    browser.implicitly_wait(20)
+    time.sleep(1)
 
     #Remove ads
-    ad_remove = browser.find_element(By.XPATH, "//*[@id='onesignal-slidedown-cancel-button']").click()
+    # Wait up to 10 seconds for the element to appear
+    ad_remove = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@id='onesignal-slidedown-cancel-button']")))
+
+    # Click on the element
+    ad_remove.click()
 
     #Navigate to search bar and enter search key
     search_bar = browser.find_element(By.CLASS_NAME, "fs-stxt").send_keys(input_string)
@@ -47,13 +53,16 @@ def get_list(input_string):
     #print(products)
     product_dict = []
     for product in products:
+
+        # print(product)
         link = product.find('a', {'class' : 'cdt-product__name'}, {'target' : '_self'}).get('href')
         name = product.find('a', {'class' : 'cdt-product__name'}, {'target' : '_self'}).get('title')
         price = product.find('div', {'class' : 'progress'}).text
-
-        # print(web_url + link)
+        price = int(price.split()[0].replace('.', '').replace(',', '.'))
+        
+        # print("https://fptshop.com.vn/" + link)
         # print(name)
-        # print(price.get_text())
+        # print(price)
         # print("\n######################################################################\n")
         doc = {'name': name, 'price': price, 'link': web_url +link}
         product_dict.append(doc)

@@ -2,6 +2,9 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+import time
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 web_url = 'https://www.thegioididong.com'
 
@@ -20,11 +23,13 @@ def get_list(input_string):
 
     #Find the sorting button
     sort_button = browser.find_element(By.CLASS_NAME, 'click-sort').click()
-    sort_button = browser.find_element(By.XPATH, "//div[@class='sort-select-main sort ']/p[4]")
+    # sort_button = browser.find_element(By.XPATH, "//div[@class='sort-select-main sort ']/p[4]")
+    sort_button = browser.find_element(By.LINK_TEXT, 'Giá thấp đến cao')
     browser.implicitly_wait(20)
     #double click button
     click_sort = sort_button.click()
-    click_sort = sort_button.click()
+    time.sleep(0.5)
+    # click_sort = (WebDriverWait(browser, 30).until(EC.presence_of_element_located((By.LINK_TEXT, 'Giá thấp đến cao')))).click()
 
 
     # Pass the page content to BeautifulSoup
@@ -41,7 +46,8 @@ def get_list(input_string):
         link = product.find('a', {'class' : 'main-contain'}, {'target' : '_self'}).get('href')
         name = product.find('a', {'class' : 'main-contain'}, {'target' : '_self'}).get('data-name')
         price = product.find('a', {'class' : 'main-contain'}, {'target' : '_self'}).get('data-price')
-        
+        price = int(price.replace('.', ' ').split()[0])
+
         doc = {'name': name, 'price': price, 'link': web_url +link}
         product_dict.append(doc)
         # print(web_url + link)
