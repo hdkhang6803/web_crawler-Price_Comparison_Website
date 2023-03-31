@@ -69,7 +69,7 @@ def getProduct(productName):
             prod.append([title, price, domain + link])
 
     # Close the webdriver
-    print(len(prod))
+    # print(len(prod))
     driver.quit()
 
     return prod

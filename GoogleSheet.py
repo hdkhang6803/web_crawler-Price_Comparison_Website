@@ -13,13 +13,13 @@ class GoogleSheet:
     self.__creds = service_account.Credentials.from_service_account_file(cred_file, scopes= SCOPES)
     self.service = build('sheets', 'v4', credentials = self.__creds)
 
-  def remove_duplicate(self):
+  def remove_duplicate(self, sheet_id = 0):
     batch_update_spreadsheet_request_body = {
       "requests": [
         {
           "deleteDuplicates": {
             "range": {
-              "sheetId": 0,
+              "sheetId": sheet_id,
               "startColumnIndex": 0,
               "endColumnIndex": 3,
               "startRowIndex": 0,
@@ -27,7 +27,7 @@ class GoogleSheet:
             },
             "comparisonColumns": [
               {
-                "sheetId": 0,
+                "sheetId": sheet_id,
                 "dimension": "COLUMNS",
                 "startIndex": 0,
                 "endIndex": 3
@@ -41,12 +41,12 @@ class GoogleSheet:
     request = self.service.spreadsheets().batchUpdate(spreadsheetId=self.id, body=batch_update_spreadsheet_request_body)
     response = request.execute()
 
-  def update_with_data(self, data):
+  def update_with_data(self, data, sheet_id = 0):
     value_range_body = {
       "majorDimension": "DIMENSION_UNSPECIFIED",
       "values": data 
     }
-    request = self.service.spreadsheets().values().append(spreadsheetId=self.id, range="A1", valueInputOption="RAW", body=value_range_body)
+    request = self.service.spreadsheets().values().append(spreadsheetId=self.id, range= str(sheet_id) + "A1", valueInputOption="RAW", body=value_range_body)
     response = request.execute()
 
 
