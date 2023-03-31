@@ -54,18 +54,23 @@ def get_list(input_string):
     product_dict = []
     for product in products:
 
-        # print(product)
-        link = product.find('a', {'class' : 'cdt-product__name'}, {'target' : '_self'}).get('href')
-        name = product.find('a', {'class' : 'cdt-product__name'}, {'target' : '_self'}).get('title')
-        price = product.find('div', {'class' : 'progress'}).text
-        price = int(price.split()[0].replace('.', '').replace(',', '.'))
+        print(product)
+        # link = product.find('a', {'class' : 'cdt-product__info'}, {'target' : '_self'}).get('href')
+        link = product.select_one('div.cdt-product__info a').get('href')
+        # name = product.find('a', {'class' : 'cdt-product__info'}, {'target' : '_self'}).get('title')
+        name = product.select_one('div.cdt-product__info a').get('title')
+        price = product.select_one('div.progress, div.price')
         
-        # print("https://fptshop.com.vn/" + link)
-        # print(name)
-        # print(price)
-        # print("\n######################################################################\n")
-        doc = {'name': name, 'price': price, 'link': web_url +link}
-        product_dict.append(doc)
+        
+        print("https://fptshop.com.vn/" + link)
+        print(name)
+        print(price)
+        print("\n######################################################################\n")
+        if price != None:
+            price = price.get_text()
+            price = int(price.split()[0].replace('.', '').replace(',', '.'))
+            doc = {'name': name, 'price': price, 'link': web_url +link}
+            product_dict.append(doc)
         
     browser.quit()
     return product_dict
