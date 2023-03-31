@@ -54,7 +54,7 @@ def get_list(input_string):
     product_dict = []
     for product in products:
 
-        print(product)
+        # print(product)
         # link = product.find('a', {'class' : 'cdt-product__info'}, {'target' : '_self'}).get('href')
         link = product.select_one('div.cdt-product__info a').get('href')
         # name = product.find('a', {'class' : 'cdt-product__info'}, {'target' : '_self'}).get('title')
@@ -62,10 +62,10 @@ def get_list(input_string):
         price = product.select_one('div.progress, div.price')
         
         
-        print("https://fptshop.com.vn/" + link)
-        print(name)
-        print(price)
-        print("\n######################################################################\n")
+        # print("https://fptshop.com.vn/" + link)
+        # print(name)
+        # print(price)
+        # print("\n######################################################################\n")
         if price != None:
             price = price.get_text()
             price = int(price.split()[0].replace('.', '').replace(',', '.'))

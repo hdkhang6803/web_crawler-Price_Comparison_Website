@@ -13,7 +13,12 @@ def store_in_db(df):
     sheet_instance = sheet.worksheet('Sheet1')
 
     # print(df)
+    
+    data_list = df.values.tolist()
 
-    # Append the new rows to the Google Sheet
-    sheet_instance.append_rows(df.values.tolist())
+    # Write the data to the sheet starting at cell A1
+    sheet_instance.delete_rows(2, None)
+    sheet_instance.update('A2', data_list)
+    
     print(sheet.url)
+
