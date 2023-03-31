@@ -66,7 +66,7 @@ def getProduct(productName):
             print('Title:', title)
             print('Price:', price)
             print('------------------------')
-            prod.append([domain + link, title, price])
+            prod.append([title, price, domain + link])
 
     # Close the webdriver
     print(len(prod))
