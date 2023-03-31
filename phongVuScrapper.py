@@ -31,7 +31,7 @@ def getProduct(productName):
         # Parse the HTML using BeautifulSoup
         soup = BeautifulSoup(html, 'html.parser')
 
-        empty_divs = soup.find_all('div', {'class': 'css-447dxq'})
+        empty_divs = soup.find_all('div', {'class': 'att-no-products-found css-rmetzu'})
         if (len(empty_divs) != 0 or i > 3):
             break
 
@@ -61,12 +61,12 @@ def getProduct(productName):
             print('Title:', title)
             print('Price:', price)
             print('------------------------')
-            prod.append([domain + link, title, price])
+            prod.append([title, price, domain + link])
 
     # Close the webdriver
-    print(len(prod))
+    # print(len(prod))
     driver.quit()
 
     return prod
 
-getProduct("")
+# getProduct("")
