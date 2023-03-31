@@ -69,8 +69,7 @@ def get_list(input_string):
         if price != None:
             price = price.get_text()
             price = int(price.split()[0].replace('.', '').replace(',', '.'))
-            doc = {'name': name, 'price': price, 'link': web_url +link}
-            product_dict.append(doc)
+            product_dict.append([name, price, web_url + link])
         
     browser.quit()
     return product_dict

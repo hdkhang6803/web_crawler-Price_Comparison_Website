@@ -5,7 +5,7 @@ def store_in_db(df):
 
     # Set up the Google Sheets API credentials
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-    creds = ServiceAccountCredentials.from_json_keyfile_name('sheet-auth.json', scope)
+    creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
     client = gspread.authorize(creds)
 
     # Open the spreadsheet and select the worksheet

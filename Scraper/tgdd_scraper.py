@@ -58,9 +58,8 @@ def get_list(input_string):
         name = product.find('a', {'class' : 'main-contain'}, {'target' : '_self'}).get('data-name')
         price = product.find('a', {'class' : 'main-contain'}, {'target' : '_self'}).get('data-price')
         price = int(price.replace('.', ' ').split()[0])
-
-        doc = {'name': name, 'price': price, 'link': web_url +link}
-        product_dict.append(doc)
+        
+        product_dict.append([name, price, web_url + link])
         # print(web_url + link)
         # print(name)
         # print(price)

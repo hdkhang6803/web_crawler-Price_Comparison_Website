@@ -1,25 +1,27 @@
 import threading
-import tgdd_scraper
-import fpt_scraper
+import Scraper.tgdd_scraper as tgdd_scraper
+import Scraper.fpt_scraper as fpt_scraper
 import ggsheet_database
 import pandas as pd
 
 input_string = "laptop asus gaming"
 
-df = pd.DataFrame()
+df = []
 
 
 def tgdd_crawler():
     tgdd_data = tgdd_scraper.get_list(input_string)
     global df 
-    df = pd.concat([df, pd.DataFrame(tgdd_data)], ignore_index=True)
+    # df = pd.concat([df, pd.DataFrame(tgdd_data)], ignore_index=True)
+    df.append(tgdd_data)
     print(df)
 
 
 def fpt_crawler():
     fpt_data = fpt_scraper.get_list(input_string)
     global df
-    df = pd.concat([df, pd.DataFrame(fpt_data)], ignore_index=True)
+    # df = pd.concat([df, pd.DataFrame(fpt_data)], ignore_index=True)
+    df.append(fpt_data)
     print(df)
 
 # Create two threads for the two crawlers

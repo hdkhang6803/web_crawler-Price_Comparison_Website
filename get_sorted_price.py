@@ -3,7 +3,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 # Authenticate with Google Drive API using a service account
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-creds = ServiceAccountCredentials.from_json_keyfile_name('sheet-auth.json', scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
 client = gspread.authorize(creds)
 
 # Open the sheet and select the first worksheet
