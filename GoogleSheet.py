@@ -23,7 +23,7 @@ class GoogleSheet:
               "startColumnIndex": 0,
               "endColumnIndex": 3,
               "startRowIndex": 0,
-              "endRowIndex": 100
+              "endRowIndex": 1000
             },
             "comparisonColumns": [
               {
@@ -41,12 +41,12 @@ class GoogleSheet:
     request = self.service.spreadsheets().batchUpdate(spreadsheetId=self.id, body=batch_update_spreadsheet_request_body)
     response = request.execute()
 
-  def update_with_data(self, data, sheet_id = 0):
+  def update_with_data(self, data, sheetName = ""):
     value_range_body = {
       "majorDimension": "DIMENSION_UNSPECIFIED",
       "values": data 
     }
-    request = self.service.spreadsheets().values().append(spreadsheetId=self.id, range= str(sheet_id) + "A1", valueInputOption="RAW", body=value_range_body)
+    request = self.service.spreadsheets().values().append(spreadsheetId=self.id, range= sheetName + "!A1", valueInputOption="RAW", body=value_range_body)
     response = request.execute()
 
 
