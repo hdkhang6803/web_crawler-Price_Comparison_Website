@@ -1,2 +1,3 @@
-client_secret.json
 __pycache__/
+client_secret.json
+sheet-auth.json
