@@ -8,6 +8,13 @@ from googleapiclient.errors import HttpError
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
 class GoogleSheet:
+  categories_id = {
+    "Laptop" : 679621757,
+    "Desktop": 885273009,
+    "LinhKien": 1480180086,
+    "PhuKien": 1048996747,
+  }
+
   def __init__(self, id, cred_file):
     self.id = id
     self.__creds = service_account.Credentials.from_service_account_file(cred_file, scopes= SCOPES)
