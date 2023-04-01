@@ -28,7 +28,7 @@ class GoogleSheet:
             "range": {
               "sheetId": sheet_id,
               "startColumnIndex": 0,
-              "endColumnIndex": 3,
+              "endColumnIndex": 4,
               "startRowIndex": 0,
               "endRowIndex": 1000
             },
