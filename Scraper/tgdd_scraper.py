@@ -17,7 +17,7 @@ catergories = [{'name': 'Laptop', 'links' : ['https://www.thegioididong.com/lapt
                                    'https://www.thegioididong.com/o-cung-di-dong',
                                    'https://www.thegioididong.com/the-nho-dien-thoai',
                                    'https://www.thegioididong.com/usb',
-                                  'https://www.thegioididong.com/man-hinh-may-tinh#c=5697&o=7&pi=1000'],}
+                                   'https://www.thegioididong.com/man-hinh-may-tinh#c=5697&o=7&pi=100'],}
                     ]
 
 product_tags = ['li.item.__cate_6862','li.item.__cate_44',
