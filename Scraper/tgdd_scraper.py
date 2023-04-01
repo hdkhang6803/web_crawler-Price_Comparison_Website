@@ -5,13 +5,13 @@ from selenium.webdriver.common.by import By
 import time
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import ggsheet_database as ggs
+import GoogleSheet as ggs
 
 web_url = 'https://www.thegioididong.com'
 
 catergories = [{'name': 'Laptop', 'links' : ['https://www.thegioididong.com/laptop#c=44&o=17&pi=1000']},
                     {'name': 'Desktop', 'links' : ['https://www.thegioididong.com/may-tinh-de-ban']},
-                    {'name': 'Phụ kiện', 'links' : ['https://www.thegioididong.com/chuot-ban-phim#c=9386&o=8&pi=1000',
+                    {'name': 'PhuKien', 'links' : ['https://www.thegioididong.com/chuot-ban-phim#c=9386&o=8&pi=1000',
                                    'https://www.thegioididong.com/tui-chong-soc#c=7923&o=14&pi=1000',
                                    'https://www.thegioididong.com/gia-do-dien-thoai?g=de-laptop-macbook',
                                    'https://www.thegioididong.com/o-cung-di-dong',
@@ -20,20 +20,20 @@ catergories = [{'name': 'Laptop', 'links' : ['https://www.thegioididong.com/lapt
                                    'https://www.thegioididong.com/man-hinh-may-tinh#c=5697&o=7&pi=100'],}
                     ]
 
-product_tags = ['li.item.__cate_6862','li.item.__cate_44',
-               'li.item.__cate_60', 'li.item.cat60',  
-               'li.item.__cate_5698', 'li.item.__cate_86',
-               'li.item.__cate_7923', 'li.item.__cate_6862',
-               'li.item.__cate_5697', 'li.item.__cate_1902',
-               'li.item.__cate_55', 'li.item.__cate_75']
+# product_tags = ['li.item.__cate_6862','li.item.__cate_44',
+#                'li.item.__cate_60', 'li.item.cat60',  
+#                'li.item.__cate_5698', 'li.item.__cate_86',
+#                'li.item.__cate_7923', 'li.item.__cate_6862',
+#                'li.item.__cate_5697', 'li.item.__cate_1902',
+#                'li.item.__cate_55', 'li.item.__cate_75']
 
-def create_css_tag():
-    css_selector = ""
-    for idx, tag in enumerate(product_tags):
-        css_selector = css_selector + tag 
-        if idx != len(product_tags) - 1:
-            css_selector = css_selector + ', '
-    return css_selector
+# def create_css_tag():
+#     css_selector = ""
+#     for idx, tag in enumerate(product_tags):
+#         css_selector = css_selector + tag 
+#         if idx != len(product_tags) - 1:
+#             css_selector = css_selector + ', '
+#     return css_selector
  
 def expand_see_more_button(browser):
     while True:
@@ -46,13 +46,13 @@ def expand_see_more_button(browser):
         except:
             break # If the button can no longer be located, break out of the loop
 
-def get_list_tgdd():
+def get_list_tgdd(database):
     #Open Chrome browser
     browser = webdriver.Chrome()
 
     #Navigate to link
     for cater in catergories:
-        product_dict = []
+        product_list = []
         for link in cater['links']:
 
             #Navigate to link
@@ -65,22 +65,36 @@ def get_list_tgdd():
             html_text = browser.page_source
             html_content = BeautifulSoup(html_text, 'html.parser')
 
-            products = html_content.select(create_css_tag()) 
+            # products = html_content.select(create_css_tag()) 
+            products = html_content.select('li[data-price]')
 
             for product in products:
                 link = product.find('a', {'class' : 'main-contain'}, {'target' : '_self'}).get('href')
                 name = product.find('a', {'class' : 'main-contain'}, {'target' : '_self'}).get('data-name')
+                img_link = ""
+                img_tag = product.find('img')
+                if 'src' in img_tag.attrs:
+                    img_link = img_tag['src']
+                else:
+                    img_link = img_tag['data-src']
                 price = product.find('a', {'class' : 'main-contain'}, {'target' : '_self'}).get('data-price')
                 price = int(price.replace('.', ' ').split()[0])
 
-                product_dict.append([name, price, web_url + link])
+                product_list.append([name, price, web_url + link, img_link])
+
+                if 'Laptop Dell Inspiron 16 5620 i5 1235U' in name:
+                    print(product)
+                if 'HP Pavilion 15 eg2088TU' in name:
+                    print(product)
                 # print(web_url + link)
                 # print(name)
                 # print(price)
                 
                 # print("\n######################################################################\n")
         
-        ggs.store_in_db(product_dict, cater['name'])
+        # ggs.store_in_db(product_list, cater['name'])
+        database.update_with_data(product_list, cater['name'])
+        database.remove_duplicate(database.categories_id[cater['name']])
 
     browser.quit()        
 

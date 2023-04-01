@@ -1,20 +1,17 @@
 import threading
 import Scraper.tgdd_scraper as tgdd_scraper
 # import Scraper.fpt_scraper as fpt_scraper
-import ggsheet_database
+from GoogleSheet import GoogleSheet
 import pandas as pd
 
-input_string = "laptop"
-
-df = []
+spreadsheet_id = '1H5TTOdrTC_T7U7k_ejCUG8BZWn97NuaxD0t4F7LwH8g'
+cred_file = 'client_secret.json'
+ggsheet = GoogleSheet(spreadsheet_id, cred_file)
 
 
 def tgdd_crawler():
-    tgdd_data = tgdd_scraper.get_list_tgdd()
-    # global df 
-    # # df = pd.concat([df, pd.DataFrame(tgdd_data)], ignore_index=True)
-    # df.append(tgdd_data)
-    # print(df)
+    tgdd_data = tgdd_scraper.get_list_tgdd(ggsheet)
+   
 
 
 # def fpt_crawler():
