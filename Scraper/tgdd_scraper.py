@@ -10,14 +10,14 @@ import ggsheet_database as ggs
 web_url = 'https://www.thegioididong.com'
 
 catergories = [{'name': 'Laptop', 'links' : ['https://www.thegioididong.com/laptop#c=44&o=17&pi=1000']},
-                    {'name': 'Desktop', 'links' : ['https://www.thegioididong.com/may-tinh-de-ban',
-                                  'https://www.thegioididong.com/man-hinh-may-tinh#c=5697&o=7&pi=1000']},
+                    {'name': 'Desktop', 'links' : ['https://www.thegioididong.com/may-tinh-de-ban']},
                     {'name': 'Phụ kiện', 'links' : ['https://www.thegioididong.com/chuot-ban-phim#c=9386&o=8&pi=1000',
                                    'https://www.thegioididong.com/tui-chong-soc#c=7923&o=14&pi=1000',
                                    'https://www.thegioididong.com/gia-do-dien-thoai?g=de-laptop-macbook',
                                    'https://www.thegioididong.com/o-cung-di-dong',
                                    'https://www.thegioididong.com/the-nho-dien-thoai',
-                                   'https://www.thegioididong.com/usb'],}
+                                   'https://www.thegioididong.com/usb',
+                                  'https://www.thegioididong.com/man-hinh-may-tinh#c=5697&o=7&pi=1000'],}
                     ]
 
 product_tags = ['li.item.__cate_6862','li.item.__cate_44',
