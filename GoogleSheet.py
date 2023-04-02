@@ -48,6 +48,12 @@ class GoogleSheet:
     }
     request = self.service.spreadsheets().values().append(spreadsheetId=self.id, range= sheetName + "!A1", valueInputOption="RAW", body=value_range_body)
     response = request.execute()
+  
+  def get_data(self, rows, cols, sheetName = ""):
+    range = sheetName + "!R1C1:R" + str(rows) + "C" + str(cols)
+    request = self.service.spreadsheets().values().get(spreadsheetId=self.id, range=range)
+    response = request.execute()
+    return response
 
 
 

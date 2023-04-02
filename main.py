@@ -11,12 +11,14 @@ categories_id = {
     "PhuKien": 1048996747,
 }
 
-ggsheet = GoogleSheet(spreadsheet_id, cred_file)
+if __name__ == "__main__":
+    ggsheet = GoogleSheet(spreadsheet_id, cred_file)
+    training_data = ggsheet.get_data(10, 4, "Laptop")
 
-phongvudata = phongVuScrapper.getProduct("thinkpad")
-# print(phongvudata)
+    # phongvudata = phongVuScrapper.getProduct("thinkpad")
+    # # print(phongvudata)
 
-# change category to update different product type sheet
-category = "Laptop"
-ggsheet.update_with_data(phongvudata, category)
-ggsheet.remove_duplicate(categories_id[category])
+    # # change category to update different product type sheet
+    # category = "Laptop"
+    # ggsheet.update_with_data(phongvudata, category)
+    # ggsheet.remove_duplicate(categories_id[category])
