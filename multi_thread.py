@@ -18,7 +18,7 @@ def fpt_crawler():
     fpt_data = fpt_scraper.get_list_fpt(ggsheet)
 
 # Create two threads for the two crawlers
-# tgdd_thread = threading.Thread(target=tgdd_crawler)
+tgdd_thread = threading.Thread(target=tgdd_crawler)
 fpt_thread = threading.Thread(target=fpt_crawler)
 
 # Start the threads
