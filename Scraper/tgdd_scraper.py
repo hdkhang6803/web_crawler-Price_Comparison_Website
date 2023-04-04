@@ -82,10 +82,10 @@ def get_list_tgdd(database):
 
                 product_list.append([name, price, web_url + link, img_link])
 
-                if 'Laptop Dell Inspiron 16 5620 i5 1235U' in name:
-                    print(product)
-                if 'HP Pavilion 15 eg2088TU' in name:
-                    print(product)
+                # if 'Laptop Dell Inspiron 16 5620 i5 1235U' in name:
+                #     print(product)
+                # if 'HP Pavilion 15 eg2088TU' in name:
+                #     print(product)
                 # print(web_url + link)
                 # print(name)
                 # print(price)
