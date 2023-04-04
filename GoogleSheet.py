@@ -30,7 +30,7 @@ class GoogleSheet:
               "startColumnIndex": 0,
               "endColumnIndex": 4,
               "startRowIndex": 0,
-              "endRowIndex": 1000
+              "endRowIndex": 2000
             },
             "comparisonColumns": [
               {
