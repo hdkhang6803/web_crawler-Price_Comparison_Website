@@ -22,11 +22,11 @@ tgdd_thread = threading.Thread(target=tgdd_crawler)
 fpt_thread = threading.Thread(target=fpt_crawler)
 
 # Start the threads
-# tgdd_thread.start()
+tgdd_thread.start()
 fpt_thread.start()
 
 # Wait for the threads to finish before proceeding
-# tgdd_thread.join()
+tgdd_thread.join()
 fpt_thread.join()
 
 
