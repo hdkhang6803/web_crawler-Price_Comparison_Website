@@ -30,7 +30,7 @@ class GoogleSheet:
               "startColumnIndex": 0,
               "endColumnIndex": 4,
               "startRowIndex": 0,
-              "endRowIndex": 1000
+              "endRowIndex": 5000
             },
             "comparisonColumns": [
               {
@@ -56,8 +56,8 @@ class GoogleSheet:
     request = self.service.spreadsheets().values().append(spreadsheetId=self.id, range= sheetName + "!A1", valueInputOption="RAW", body=value_range_body)
     response = request.execute()
   
-  def get_data(self, rows, cols, sheetName = ""):
-    range = sheetName + "!R1C1:R" + str(rows) + "C" + str(cols)
+  def get_data(self, rows_start, rows_end, cols, sheetName = ""):
+    range = sheetName + "!R" + str(rows_start) + "C1:R" + str(rows_end) + "C" + str(cols)
     request = self.service.spreadsheets().values().get(spreadsheetId=self.id, range=range)
     response = request.execute()
     return response
