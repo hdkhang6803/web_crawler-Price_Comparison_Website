@@ -56,12 +56,13 @@ def expand_see_more_button(browser, cater):
             break
 
 def scroll_to_lazy(browser):
-        elements = browser.find_elements(By.CSS_SELECTOR, 'a .lazy-load-image-background, .product__img, .product_img')
-                # print(element)
-        for element in elements:
-            browser.execute_script("arguments[0].scrollIntoView(true);", element)
-            time.sleep(0.02)
-            browser.implicitly_wait(20)
+    browser.execute_script("window.scrollTo(0, document.body.scrollHeight);") #scroll from top to bot
+        # elements = browser.find_elements(By.CSS_SELECTOR, 'a .lazy-load-image-background, .product__img, .product_img')
+        #         # print(element)
+        # for element in elements:
+        #     browser.execute_script("arguments[0].scrollIntoView(true);", element)
+        #     time.sleep(0.02)
+        #     browser.implicitly_wait(20)
 
 def get_list_cate(database, cate):
     product_list = []
@@ -117,6 +118,7 @@ def get_list_cate(database, cate):
             # print("\n######################################################################\n")
     database.update_with_data(product_list, cate['name'])
     database.remove_duplicate(database.categories_id[cate['name']])
+    database.sort_sheet_by_price(database.categories_id[cate['name']], cate['name'])
     print('######################################' + web_url + ' ' + cate['name'] + ' FINISHED')
     return product_list
        

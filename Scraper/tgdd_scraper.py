@@ -47,7 +47,6 @@ def expand_see_more_button(browser):
             break # If the button can no longer be located, break out of the loop
 
 def get_list_tgdd(database):
-    print('2')
     #Open Chrome browser
     browser = webdriver.Chrome()
 
@@ -96,6 +95,7 @@ def get_list_tgdd(database):
         # ggs.store_in_db(product_list, cate['name'])
         database.update_with_data(product_list, cate['name'])
         database.remove_duplicate(database.categories_id[cate['name']])
+        database.sort_sheet_by_price(database.categories_id[cate['name']], cate['name'])
         print('#################################' + web_url + ' ' + cate['name'] + ' FINISHED')
 
     browser.quit()        

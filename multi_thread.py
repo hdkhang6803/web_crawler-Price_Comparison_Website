@@ -31,15 +31,12 @@ def run_multi_thread_cate(categories, database, function):
         t.join()
 
 def run_multi_thread_web(web_func_list, database):
-    print('hi')
     threads = []
     for web_func in web_func_list:
-        print('1')
         t = threading.Thread(target=web_func, args=[database])
         threads.append(t)
 
     for t in threads:
-        print('start')
         t.start()
 
     # Wait for all of the threads to finish
