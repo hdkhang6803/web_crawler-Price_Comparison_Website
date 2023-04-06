@@ -1,5 +1,17 @@
 from GoogleSheet import GoogleSheet
 import phongVuScrapper
+import cellphonesScraper
+
+# spreadsheet_id = '1hLWC7ZgIkdN6JFHlzGCJrHEqmPnFUYugwFxx32sbb0o'
+
+# cred_file = 'client_secret.json'
+
+# categories_id = {
+#     "Laptop" : 0,
+#     "Desktop": 2008175367,
+#     "LinhKien": 12846980,
+#     "PhuKien": 398039562,
+# }
 
 spreadsheet_id = '1H5TTOdrTC_T7U7k_ejCUG8BZWn97NuaxD0t4F7LwH8g'
 cred_file = 'client_secret.json'
@@ -12,11 +24,5 @@ categories_id = {
 }
 
 ggsheet = GoogleSheet(spreadsheet_id, cred_file)
-
-phongvudata = phongVuScrapper.getProduct("thinkpad")
-# print(phongvudata)
-
-# change category to update different product type sheet
-category = "Laptop"
-ggsheet.update_with_data(phongvudata, category)
-ggsheet.remove_duplicate(categories_id[category])
+cellphonesScraper.scrape_all(ggsheet, categories_id)
+print('Cellphones.com.vn has been scraped successfully!')

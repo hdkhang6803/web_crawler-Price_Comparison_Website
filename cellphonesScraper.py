@@ -4,25 +4,64 @@ from selenium.webdriver.common.by import By
 from time import sleep
 import re
 
-def show_more(driver, show_more_class, ad_remove_class):
+class product_selector:
+    def __init__(self, card, link, title, price, image):
+        self.card = card
+        self.link = link
+        self.title = title
+        self.price = price
+        self.image = image
+
+catergories = [
+    {'name': 'Laptop', 
+     'links' : ['https://cellphones.com.vn/laptop.html']},
+    {'name': 'Desktop', 
+     'links' : ['https://cellphones.com.vn/may-tinh-de-ban/lap-rap.html',
+                'https://cellphones.com.vn/may-tinh-de-ban/all-in-one.html',
+                'https://cellphones.com.vn/may-tinh-de-ban/dong-bo.html']},
+    {'name': 'LinhKien',
+     'links': ['https://cellphones.com.vn/linh-kien.html']},
+    {'name': 'PhuKien', 
+     'links' : ['https://cellphones.com.vn/phu-kien/chuot-ban-phim-may-tinh.html',
+                'https://cellphones.com.vn/phu-kien/may-tinh-laptop/phan-mem.html',
+                'https://cellphones.com.vn/phu-kien/may-tinh-laptop/webcam.html',
+                'https://cellphones.com.vn/phu-kien/may-tinh-laptop/de-tan-nhiet.html',
+                'https://cellphones.com.vn/phu-kien/thiet-bi-mang.html',
+                'https://cellphones.com.vn/thiet-bi-am-thanh.html',
+                'https://cellphones.com.vn/man-hinh.html']}
+    ]
+
+def show_more(driver, show_more_selector, remove_ad_selector, close_reminder_selector):
     while True:
         try:
-            show_more_button = driver.find_element(By.CLASS_NAME, show_more_class)
+            show_more_button = driver.find_element(By.CSS_SELECTOR, show_more_selector)
             show_more_button.click()
-            sleep(0.5)
+            sleep(0.25)
         except:
             try:
-                close_ads_btn = driver.find_element(By.CLASS_NAME, ad_remove_class)
-                close_ads_btn.click()
-                sleep(0.5)
+                sleep(0.75)
+                show_more_button = driver.find_element(By.CSS_SELECTOR, show_more_selector)
+                show_more_button.click()
+                sleep(0.25)
             except:
-                break 
+                try:
+                    sleep(10)
+                    close_ads_btn = driver.find_element(By.CSS_SELECTOR, remove_ad_selector) 
+                    close_ads_btn.click()
+                    sleep(0.5)
+                except:
+                    try:
+                        close_reminder_btn = driver.find_element(By.CSS_SELECTOR, close_reminder_selector)
+                        close_reminder_btn.click()
+                        sleep(0.5)
+                    except:
+                        break
 
-def extractProductInfo(product_html, link_class, title_class, price_class, img_class):
-    title = product_html.select_one(title_class).get_text().strip()
-    price = product_html.select_one(price_class).get_text().strip()
-    link = product_html.select_one(link_class).get('href')
-    img = product_html.select_one(img_class).get('src')
+def extractProductInfo(prod_html, prod_selector):
+    title = prod_html.select_one(prod_selector.title).get_text().strip()
+    price = prod_html.select_one(prod_selector.price).get_text().strip()
+    link = prod_html.select_one(prod_selector.link).get('href')
+    img = prod_html.select_one(prod_selector.image).get('src')
 
     if price != None:
         price = re.sub('\D', '', price)
@@ -30,51 +69,45 @@ def extractProductInfo(product_html, link_class, title_class, price_class, img_c
             price = int(price)
             return [title, price, link, img]
     return []
-        
+
 def get_products_in_category(category):
     driver = webdriver.Chrome()
-    domain = 'https://cellphones.com.vn/'
-    subcats = parse_category(category)
     category_dictionary = []
+    common_prod_selector = product_selector(
+        'div.product-info-container.product-item .product-info',
+        '.product__link', 
+        'div.product__name h3',
+        '.box-info__box-price p.product__price--show', 
+        '.product__image img')
 
-    for subcat in subcats:
-        driver.get(domain + subcat + '.html')
-        sleep(10)
-        show_more(driver, 'btn-show-more', 'cancel-button-top')
+    for link in category['links']:
+        driver.get(link)
+        show_more(driver, 
+            '.button.btn-show-more', # show_more_selector
+            '.cancel-button-top', # remove_ad_selector
+            '.ins-web-opt-in-reminder-close-button') # close_reminder_selector
         html_text = driver.page_source
         html_content = BeautifulSoup(html_text, 'html.parser')
-        products = html_content.select('div.product-info-container.product-item .product-info')
-
+        
+        products = html_content.select(common_prod_selector.card)
         for product in products:
-            pro_info = extractProductInfo(product, 
-                '.product__link', 'div.product__name h3', 
-                '.box-info__box-price p.product__price--show', '.product__image img')
+            pro_info = extractProductInfo(product, common_prod_selector)
             category_dictionary.append(pro_info)
+        print('Scraped', link, '-', len(category_dictionary), category['name'])
+
     driver.quit()
     return category_dictionary
 
-def parse_category(category):
-    if (category == 'Laptop'):
-        return ['/laptop']
-    if (category == 'Desktop'):
-        return [ 
-            '/may-tinh-de-ban/lap-rap',
-            '/may-tinh-de-ban/all-in-one',
-            '/may-tinh-de-ban/dong-bo'
-        ]
-    if (parse_category == 'LinhKien'):
-        return ['/linh-kien']
-    if (parse_category == 'PhuKien'):
-        return [
-            '/phu-kien/chuot-ban-phim-may-tinh',
-            '/phu-kien/may-tinh-laptop/phan-mem',
-            'phu-kien/may-tinh-laptop/webcam',
-            '/phu-kien/may-tinh-laptop/de-tan-nhiet',
-            '/phu-kien/thiet-bi-mang',
-            '/thiet-bi-am-thanh'
-            '/man-hinh',
-        ]
-    return []
+def scrape_all(database, categories_id):
+    for cat in catergories:
+        print('---- Started crawling', cat['name'], '----')
+        product_list = get_products_in_category(cat)
+        print('Finished crawling', cat['name'], '-', 
+              len(product_list), 'products scraped.')
+        database.update_with_data(product_list, cat['name'])
+        print('Updated products on', cat['name'])
+        database.remove_duplicate(categories_id[cat['name']])
+        print('Removed duplicates on', cat['name'], '\n')
 
 
 
