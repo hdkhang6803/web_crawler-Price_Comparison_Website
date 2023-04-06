@@ -9,7 +9,7 @@ import GoogleSheet as ggs
 
 web_url = 'https://www.thegioididong.com'
 
-catergories = [{'name': 'Laptop', 'links' : ['https://www.thegioididong.com/laptop#c=44&o=17&pi=1000']},
+categories = [{'name': 'Laptop', 'links' : ['https://www.thegioididong.com/laptop#c=44&o=17&pi=1000']},
                     {'name': 'Desktop', 'links' : ['https://www.thegioididong.com/may-tinh-de-ban']},
                     {'name': 'PhuKien', 'links' : ['https://www.thegioididong.com/chuot-ban-phim#c=9386&o=8&pi=1000',
                                    'https://www.thegioididong.com/tui-chong-soc#c=7923&o=14&pi=1000',
@@ -51,9 +51,9 @@ def get_list_tgdd(database):
     browser = webdriver.Chrome()
 
     #Navigate to link
-    for cater in catergories:
+    for cate in categories:
         product_list = []
-        for link in cater['links']:
+        for link in cate['links']:
 
             #Navigate to link
             browser.get(link)
@@ -82,19 +82,21 @@ def get_list_tgdd(database):
 
                 product_list.append([name, price, web_url + link, img_link])
 
-                if 'Laptop Dell Inspiron 16 5620 i5 1235U' in name:
-                    print(product)
-                if 'HP Pavilion 15 eg2088TU' in name:
-                    print(product)
+                # if 'Laptop Dell Inspiron 16 5620 i5 1235U' in name:
+                #     print(product)
+                # if 'HP Pavilion 15 eg2088TU' in name:
+                #     print(product)
                 # print(web_url + link)
                 # print(name)
                 # print(price)
                 
                 # print("\n######################################################################\n")
         
-        # ggs.store_in_db(product_list, cater['name'])
-        database.update_with_data(product_list, cater['name'])
-        database.remove_duplicate(database.categories_id[cater['name']])
+        # ggs.store_in_db(product_list, cate['name'])
+        database.update_with_data(product_list, cate['name'])
+        database.remove_duplicate(database.categories_id[cate['name']])
+        database.sort_sheet_by_price(database.categories_id[cate['name']], cate['name'])
+        print('#################################' + web_url + ' ' + cate['name'] + ' FINISHED')
 
     browser.quit()        
 
