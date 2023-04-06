@@ -9,16 +9,20 @@ import GoogleSheet as ggs
 
 web_url = 'https://www.thegioididong.com'
 
-categories = [{'name': 'Laptop', 'links' : ['https://www.thegioididong.com/laptop#c=44&o=17&pi=1000']},
-                    {'name': 'Desktop', 'links' : ['https://www.thegioididong.com/may-tinh-de-ban']},
-                    {'name': 'PhuKien', 'links' : ['https://www.thegioididong.com/chuot-ban-phim#c=9386&o=8&pi=1000',
-                                   'https://www.thegioididong.com/tui-chong-soc#c=7923&o=14&pi=1000',
-                                   'https://www.thegioididong.com/gia-do-dien-thoai?g=de-laptop-macbook',
-                                   'https://www.thegioididong.com/o-cung-di-dong',
-                                   'https://www.thegioididong.com/the-nho-dien-thoai',
-                                   'https://www.thegioididong.com/usb',
-                                   'https://www.thegioididong.com/man-hinh-may-tinh#c=5697&o=7&pi=100'],}
-                    ]
+categories = [
+    {'name': 'Laptop', 
+     'links' : ['https://www.thegioididong.com/laptop#c=44&o=17&pi=1000']},
+    {'name': 'Desktop', 
+     'links' : ['https://www.thegioididong.com/may-tinh-de-ban']},
+    {'name': 'PhuKien', 
+     'links' : ['https://www.thegioididong.com/chuot-ban-phim#c=9386&o=8&pi=1000',
+                'https://www.thegioididong.com/tui-chong-soc#c=7923&o=14&pi=1000',
+                'https://www.thegioididong.com/gia-do-dien-thoai?g=de-laptop-macbook',
+                'https://www.thegioididong.com/o-cung-di-dong',
+                'https://www.thegioididong.com/the-nho-dien-thoai',
+                'https://www.thegioididong.com/usb',
+                'https://www.thegioididong.com/man-hinh-may-tinh#c=5697&o=7&pi=100'],}
+]
 
 # product_tags = ['li.item.__cate_6862','li.item.__cate_44',
 #                'li.item.__cate_60', 'li.item.cat60',  
@@ -94,8 +98,7 @@ def get_list_tgdd(database):
         
         # ggs.store_in_db(product_list, cate['name'])
         database.update_with_data(product_list, cate['name'])
-        database.remove_duplicate(database.categories_id[cate['name']])
-        database.sort_sheet_by_price(database.categories_id[cate['name']], cate['name'])
+        database.remove_duplicate(database.switch_spreadsheet_id()[cate['name']])
         print('#################################' + web_url + ' ' + cate['name'] + ' FINISHED')
 
     browser.quit()        

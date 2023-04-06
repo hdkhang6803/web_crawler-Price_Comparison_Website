@@ -10,25 +10,30 @@ from selenium.common.exceptions import NoSuchElementException, ElementNotInterac
 from GoogleSheet import GoogleSheet
 web_url = 'https://fptshop.com.vn/'
 
-categories = [{'name': 'Laptop', 'links' : ['https://fptshop.com.vn/may-tinh-xach-tay?sort=ban-chay-nhat&trang=1000']},
-                    {'name': 'Desktop', 'links' : ['https://fptshop.com.vn/may-tinh-de-ban?sort=ban-chay-nhat&trang=100']},
-                    {'name': 'PhuKien', 'links' : ['https://fptshop.com.vn/man-hinh?sort=ban-chay-nhat&trang=1000',
-                                   'https://fptshop.com.vn/phu-kien/the-nho',
-                                   'https://fptshop.com.vn/phu-kien/tai-nghe',
-                                   'https://fptshop.com.vn/phu-kien/usb-o-cung',
-                                   'https://fptshop.com.vn/phu-kien/chuot',
-                                   'https://fptshop.com.vn/phu-kien/ban-phim',
-                                   'https://fptshop.com.vn/phu-kien/balo-tui-xach']},
-                    {'name' : 'LinhKien', 'links' : ['https://fptshop.com.vn/linh-kien/mainboard',
-                                                     'https://fptshop.com.vn/linh-kien/cpu',
-                                                     'https://fptshop.com.vn/linh-kien/vga',
-                                                     'https://fptshop.com.vn/linh-kien/ram',
-                                                     'https://fptshop.com.vn/linh-kien/o-cung',
-                                                     'https://fptshop.com.vn/linh-kien/nguon-may-tinh',
-                                                     'https://fptshop.com.vn/linh-kien/vo-case',
-                                                     'https://fptshop.com.vn/linh-kien/tan-nhiet',
-                                                     'https://fptshop.com.vn/linh-kien/o-dia-quang']}
-                ]
+categories = [
+    {'name': 'Laptop', 
+     'links' : ['https://fptshop.com.vn/may-tinh-xach-tay?sort=ban-chay-nhat&trang=1000']},
+    {'name': 'Desktop', 
+     'links' : ['https://fptshop.com.vn/may-tinh-de-ban?sort=ban-chay-nhat&trang=100']},
+    {'name': 'PhuKien', 
+     'links' : ['https://fptshop.com.vn/man-hinh?sort=ban-chay-nhat&trang=1000',
+                'https://fptshop.com.vn/phu-kien/the-nho',
+                'https://fptshop.com.vn/phu-kien/tai-nghe',
+                'https://fptshop.com.vn/phu-kien/usb-o-cung',
+                'https://fptshop.com.vn/phu-kien/chuot',
+                'https://fptshop.com.vn/phu-kien/ban-phim',
+                'https://fptshop.com.vn/phu-kien/balo-tui-xach']},
+    {'name' : 'LinhKien', 
+     'links' : ['https://fptshop.com.vn/linh-kien/mainboard',
+                'https://fptshop.com.vn/linh-kien/cpu',
+                'https://fptshop.com.vn/linh-kien/vga',
+                'https://fptshop.com.vn/linh-kien/ram',
+                'https://fptshop.com.vn/linh-kien/o-cung',
+                'https://fptshop.com.vn/linh-kien/nguon-may-tinh',
+                'https://fptshop.com.vn/linh-kien/vo-case',
+                'https://fptshop.com.vn/linh-kien/tan-nhiet',
+                'https://fptshop.com.vn/linh-kien/o-dia-quang']}
+]
 
 def expand_see_more_button(browser, cater):
     while True:
@@ -117,8 +122,7 @@ def get_list_cate(database, cate):
             
             # print("\n######################################################################\n")
     database.update_with_data(product_list, cate['name'])
-    database.remove_duplicate(database.categories_id[cate['name']])
-    database.sort_sheet_by_price(database.categories_id[cate['name']], cate['name'])
+    database.remove_duplicate(database.switch_spreadsheet_id()[cate['name']])
     print('######################################' + web_url + ' ' + cate['name'] + ' FINISHED')
     return product_list
        
