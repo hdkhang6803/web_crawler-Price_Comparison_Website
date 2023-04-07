@@ -9,10 +9,10 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
 class GoogleSheet:
   categories_id = {
-    "Laptop" : 679621757,
-    "Desktop": 885273009,
-    "LinhKien": 1480180086,
-    "PhuKien": 1048996747,
+    "Laptop_1" : 679621757,
+    "Desktop_1": 885273009,
+    "LinhKien_1": 1480180086,
+    "PhuKien_1": 1048996747,
   }
 
   def __init__(self, id, cred_file):

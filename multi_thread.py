@@ -66,10 +66,10 @@ hacom_thread = threading.Thread(target=hacom_crawler)
 
 def startCrawl():
     phongVu_thread.start()
-    # hacom_thread.start()
+    hacom_thread.start()
 
     phongVu_thread.join()
-    # hacom_thread.join()
+    hacom_thread.join()
 
 startCrawl()
 
