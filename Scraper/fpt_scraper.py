@@ -134,7 +134,7 @@ def get_list_cate(database, cate, used_spreadsheet):
 
 ##Cách 2: Lấy search
 def get_list_fpt(database, used_spreadsheet):
-    _thread.run_multi_thread_cate(categories, database, used_spreadsheet, get_list_cate)
+    _thread.run_multi_thread_cate(database, categories, used_spreadsheet, get_list_cate)
 
 
 

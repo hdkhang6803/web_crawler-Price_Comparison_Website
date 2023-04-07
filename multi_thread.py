@@ -17,7 +17,7 @@ ggsheet = GoogleSheet(spreadsheet_id, cred_file)
 # def fpt_crawler():
 #     fpt_data = fpt_scraper.get_list_fpt(ggsheet)
 
-def run_multi_thread_cate(categories, database, used_spreadsheet, function):
+def run_multi_thread_cate(database, categories, used_spreadsheet, function):
     threads = []
     for cate in categories:
         t = threading.Thread(target=function, args=(database, cate, used_spreadsheet))
