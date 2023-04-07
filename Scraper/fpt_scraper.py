@@ -2,32 +2,38 @@
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
+import multi_thread as _thread
+import threading
 import time
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException, ElementNotInteractableException, MoveTargetOutOfBoundsException
+from GoogleSheet import GoogleSheet
 web_url = 'https://fptshop.com.vn/'
 
-catergories = [{'name': 'Laptop', 'links' : ['https://fptshop.com.vn/may-tinh-xach-tay?sort=ban-chay-nhat&trang=1000']},
-                    {'name': 'Desktop', 'links' : ['https://fptshop.com.vn/may-tinh-de-ban?sort=ban-chay-nhat&trang=100']},
-                    {'name': 'PhuKien', 'links' : ['https://fptshop.com.vn/man-hinh?sort=ban-chay-nhat&trang=1000',
-                                   'https://fptshop.com.vn/phu-kien/the-nho',
-                                   'https://fptshop.com.vn/phu-kien/tai-nghe',
-                                   'https://fptshop.com.vn/phu-kien/usb-o-cung',
-                                   'https://fptshop.com.vn/phu-kien/chuot',
-                                   'https://fptshop.com.vn/phu-kien/ban-phim',
-                                   'https://fptshop.com.vn/phu-kien/balo-tui-xach']},
-                    {'name' : 'LinhKien', 'links' : ['https://fptshop.com.vn/linh-kien/mainboard',
-                                                     'https://fptshop.com.vn/linh-kien/cpu',
-                                                     'https://fptshop.com.vn/linh-kien/vga',
-                                                     'https://fptshop.com.vn/linh-kien/ram',
-                                                     'https://fptshop.com.vn/linh-kien/o-cung',
-                                                     'https://fptshop.com.vn/linh-kien/nguon-may-tinh',
-                                                     'https://fptshop.com.vn/linh-kien/vo-case',
-                                                     'https://fptshop.com.vn/linh-kien/tan-nhiet',
-                                                     'https://fptshop.com.vn/linh-kien/o-dia-quang']}
-                ]
+categories = [
+    {'name': 'Laptop', 
+     'links' : ['https://fptshop.com.vn/may-tinh-xach-tay?sort=ban-chay-nhat&trang=1000']},
+    {'name': 'Desktop', 
+     'links' : ['https://fptshop.com.vn/may-tinh-de-ban?sort=ban-chay-nhat&trang=100']},
+    {'name': 'PhuKien', 
+     'links' : ['https://fptshop.com.vn/man-hinh?sort=ban-chay-nhat&trang=1000',
+                'https://fptshop.com.vn/phu-kien/the-nho',
+                'https://fptshop.com.vn/phu-kien/tai-nghe',
+                'https://fptshop.com.vn/phu-kien/usb-o-cung',
+                'https://fptshop.com.vn/phu-kien/chuot',
+                'https://fptshop.com.vn/phu-kien/ban-phim',
+                'https://fptshop.com.vn/phu-kien/balo-tui-xach']},
+    {'name' : 'LinhKien', 
+     'links' : ['https://fptshop.com.vn/linh-kien/mainboard',
+                'https://fptshop.com.vn/linh-kien/cpu',
+                'https://fptshop.com.vn/linh-kien/vga',
+                'https://fptshop.com.vn/linh-kien/ram',
+                'https://fptshop.com.vn/linh-kien/o-cung',
+                'https://fptshop.com.vn/linh-kien/nguon-may-tinh',
+                'https://fptshop.com.vn/linh-kien/vo-case',
+                'https://fptshop.com.vn/linh-kien/tan-nhiet',
+                'https://fptshop.com.vn/linh-kien/o-dia-quang']}
+]
 
 def expand_see_more_button(browser, cater):
     while True:
@@ -55,76 +61,84 @@ def expand_see_more_button(browser, cater):
             break
 
 def scroll_to_lazy(browser):
-        elements = browser.find_elements(By.CSS_SELECTOR, 'a .lazy-load-image-background, .product__img, .product_img')
-                # print(element)
-        for element in elements:
-            browser.execute_script("arguments[0].scrollIntoView(true);", element)
-            time.sleep(0.02)
-            browser.implicitly_wait(20)
+    browser.execute_script("window.scrollTo(0, document.body.scrollHeight);") #scroll from top to bot
+        # elements = browser.find_elements(By.CSS_SELECTOR, 'a .lazy-load-image-background, .product__img, .product_img')
+        #         # print(element)
+        # for element in elements:
+        #     browser.execute_script("arguments[0].scrollIntoView(true);", element)
+        #     time.sleep(0.02)
+        #     browser.implicitly_wait(20)
+
+def get_list_cate(database, cate, used_spreadsheet):
+    product_list = []
+    browser = webdriver.Chrome()
+    for link in cate['links']:
+        #Navigate to link
+        browser.get(link)
+        browser.maximize_window()
+
+        #Remove ads
+        # Wait up to 10 seconds for the element to appear
+        # ad_remove = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@id='onesignal-slidedown-cancel-button']")))
+
+        #Incase not fully expand product page
+        expand_see_more_button(browser, cate['name'])
+
+        #scroll to lazy loaded element
+        scroll_to_lazy(browser)
+
+        #parse the html text for content
+        html_text = browser.page_source
+        html_content = BeautifulSoup(html_text, 'lxml')
+
+        # products = html_content.select(create_css_tag()) 
+        products = html_content.select('.product-item, .cdt-product, .product__item, .cate-product')
+
+        for product in products:
+            #get product info
+            # print(product)
+            link = product.find('a').get('href')
+            if web_url not in link:
+                link = web_url + link
+            name = product.select_one('h3').get_text().strip()
+            # print(name)
+            price = product.select_one('.progress, .product_progress, .product_main-price, .price')
+            if price == None or price == 0:
+                continue
+            
+            price = price.get_text()
+            price = int(price.replace('.', '').replace('đ','').split()[0])         
+                   
+
+            img_tag = product.select_one('img')
+            if img_tag != None:
+                img_link = img_tag.get('src')
+                if img_link is None:
+                    img_link = img_tag.get('data-src')
+
+
+            product_list.append([name, price, link, img_link])
+
+            # print(web_url + link)
+            # print(name)
+            # print(price)
+            
+            # print("\n######################################################################\n")
+    cates_id = database.switch_spreadsheet_id(used_spreadsheet)
+    database.update_with_data(product_list, cate['name'], used_spreadsheet)
+    database.remove_duplicate(cates_id[cate['name']])
+    print('######################################' + web_url + ' ' + cate['name'] + ' FINISHED')
+    browser.quit()
+    return product_list
+       
 
 ##Cách 2: Lấy search
-def get_list_fpt(database):
-    #Open Chrome browser
-    browser = webdriver.Chrome()
-
-    #Navigate to link
-    for cater in catergories:
-        product_list = []
-        for link in cater['links']:
-
-            #Navigate to link
-            browser.get(link)
-            browser.maximize_window()
-
-            #Remove ads
-            # Wait up to 10 seconds for the element to appear
-            # ad_remove = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@id='onesignal-slidedown-cancel-button']")))
-
-            #Incase not fully expand product page
-            expand_see_more_button(browser, cater['name'])
-
-            #scroll to lazy loaded element
-            scroll_to_lazy(browser)
-
-            #parse the html text for content
-            html_text = browser.page_source
-            html_content = BeautifulSoup(html_text, 'lxml')
-
-            # products = html_content.select(create_css_tag()) 
-            products = html_content.select('.product-item, .cdt-product, .product__item, .cate-product')
-
-            for product in products:
-                #get product info
-                # print(product)
-                link = product.find('a').get('href')
-                if web_url not in link:
-                    link = web_url + link
-                name = product.select_one('h3').get_text().strip()
-                # print(name)
-                price = product.select_one('.progress, .product_progress, .product_main-price, .price')
-                if price != None:
-                    price = price.get_text()
-                    price = int(price.replace('.', '').replace('đ','').split()[0])                
-
-                img_tag = product.select_one('img')
-                if img_tag != None:
-                    img_link = img_tag.get('src')
-                    if img_link is None:
-                        img_link = img_tag.get('data-src')
+def get_list_fpt(database, used_spreadsheet):
+    _thread.run_multi_thread_cate(categories, database, used_spreadsheet, get_list_cate)
 
 
-                product_list.append([name, price, link, img_link])
 
-                # print(web_url + link)
-                # print(name)
-                # print(price)
-                
-                # print("\n######################################################################\n")
-        
-        # ggs.store_in_db(product_list, cater['name'])
-        database.update_with_data(product_list, cater['name'])
-        database.remove_duplicate(database.categories_id[cater['name']])
-        print(cater['name'] + 'finished')
+
 
 # browser = webdriver.Chrome()
 # browser.get('https://fptshop.com.vn/linh-kien/ram')
@@ -168,7 +182,7 @@ def get_list_fpt(database):
 #     browser = webdriver.Chrome()
 
 #     #Navigate to link
-#     for cater in catergories:
+#     for cater in categories:
 #         product_list = []
 #         for link in cater['links']:
 
@@ -225,7 +239,7 @@ def get_list_fpt(database):
 #     browser = webdriver.Chrome()
 
 #     #Navigate to link
-#     for cater in catergories:
+#     for cater in categories:
 #         product_list = []
 #         for link in cater['links']:
 
