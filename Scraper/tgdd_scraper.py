@@ -9,16 +9,20 @@ import GoogleSheet as ggs
 
 web_url = 'https://www.thegioididong.com'
 
-categories = [{'name': 'Laptop', 'links' : ['https://www.thegioididong.com/laptop#c=44&o=17&pi=1000']},
-                    {'name': 'Desktop', 'links' : ['https://www.thegioididong.com/may-tinh-de-ban']},
-                    {'name': 'PhuKien', 'links' : ['https://www.thegioididong.com/chuot-ban-phim#c=9386&o=8&pi=1000',
-                                   'https://www.thegioididong.com/tui-chong-soc#c=7923&o=14&pi=1000',
-                                   'https://www.thegioididong.com/gia-do-dien-thoai?g=de-laptop-macbook',
-                                   'https://www.thegioididong.com/o-cung-di-dong',
-                                   'https://www.thegioididong.com/the-nho-dien-thoai',
-                                   'https://www.thegioididong.com/usb',
-                                   'https://www.thegioididong.com/man-hinh-may-tinh#c=5697&o=7&pi=100'],}
-                    ]
+categories = [
+    {'name': 'Laptop', 
+     'links' : ['https://www.thegioididong.com/laptop#c=44&o=17&pi=1000']},
+    {'name': 'Desktop', 
+     'links' : ['https://www.thegioididong.com/may-tinh-de-ban']},
+    {'name': 'PhuKien', 
+     'links' : ['https://www.thegioididong.com/chuot-ban-phim#c=9386&o=8&pi=1000',
+                'https://www.thegioididong.com/tui-chong-soc#c=7923&o=14&pi=1000',
+                'https://www.thegioididong.com/gia-do-dien-thoai?g=de-laptop-macbook',
+                'https://www.thegioididong.com/o-cung-di-dong',
+                'https://www.thegioididong.com/the-nho-dien-thoai',
+                'https://www.thegioididong.com/usb',
+                'https://www.thegioididong.com/man-hinh-may-tinh#c=5697&o=7&pi=100'],}
+]
 
 # product_tags = ['li.item.__cate_6862','li.item.__cate_44',
 #                'li.item.__cate_60', 'li.item.cat60',  
@@ -46,7 +50,7 @@ def expand_see_more_button(browser):
         except:
             break # If the button can no longer be located, break out of the loop
 
-def get_list_tgdd(database):
+def get_list_tgdd(database, used_spreadsheet):
     #Open Chrome browser
     browser = webdriver.Chrome()
 
@@ -78,12 +82,14 @@ def get_list_tgdd(database):
                 else:
                     img_link = img_tag['data-src']
                 price = product.find('a', {'class' : 'main-contain'}, {'target' : '_self'}).get('data-price')
+                if price == None or price == 0:
+                    continue
                 price = int(price.replace('.', ' ').split()[0])
 
                 product_list.append([name, price, web_url + link, img_link])
 
-                # if 'Laptop Dell Inspiron 16 5620 i5 1235U' in name:
-                #     print(product)
+                # if 'Laptop MSI Gaming Pulse GL66 11UDK i7 11800H/16GB/512GB/4GB RTX3050Ti/144Hz/Balo/Chuột/Win10 (816VN)' in name:
+                #     print(product)               
                 # if 'HP Pavilion 15 eg2088TU' in name:
                 #     print(product)
                 # print(web_url + link)
@@ -93,10 +99,10 @@ def get_list_tgdd(database):
                 # print("\n######################################################################\n")
         
         # ggs.store_in_db(product_list, cate['name'])
-        database.update_with_data(product_list, cate['name'])
-        database.remove_duplicate(database.categories_id[cate['name']])
-        database.sort_sheet_by_price(database.categories_id[cate['name']], cate['name'])
-        print('#################################' + web_url + ' ' + cate['name'] + ' FINISHED')
+        cates_id = database.switch_spreadsheet_id(used_spreadsheet)
+        database.update_with_data(product_list, cate['name'], used_spreadsheet)
+        database.remove_duplicate(cates_id[cate['name']])
+        print('######################################' + web_url + ' ' + cate['name'] + ' FINISHED')
 
     browser.quit()        
 

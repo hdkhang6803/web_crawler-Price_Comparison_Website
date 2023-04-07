@@ -10,25 +10,30 @@ from selenium.common.exceptions import NoSuchElementException, ElementNotInterac
 from GoogleSheet import GoogleSheet
 web_url = 'https://fptshop.com.vn/'
 
-categories = [{'name': 'Laptop', 'links' : ['https://fptshop.com.vn/may-tinh-xach-tay?sort=ban-chay-nhat&trang=1000']},
-                    {'name': 'Desktop', 'links' : ['https://fptshop.com.vn/may-tinh-de-ban?sort=ban-chay-nhat&trang=100']},
-                    {'name': 'PhuKien', 'links' : ['https://fptshop.com.vn/man-hinh?sort=ban-chay-nhat&trang=1000',
-                                   'https://fptshop.com.vn/phu-kien/the-nho',
-                                   'https://fptshop.com.vn/phu-kien/tai-nghe',
-                                   'https://fptshop.com.vn/phu-kien/usb-o-cung',
-                                   'https://fptshop.com.vn/phu-kien/chuot',
-                                   'https://fptshop.com.vn/phu-kien/ban-phim',
-                                   'https://fptshop.com.vn/phu-kien/balo-tui-xach']},
-                    {'name' : 'LinhKien', 'links' : ['https://fptshop.com.vn/linh-kien/mainboard',
-                                                     'https://fptshop.com.vn/linh-kien/cpu',
-                                                     'https://fptshop.com.vn/linh-kien/vga',
-                                                     'https://fptshop.com.vn/linh-kien/ram',
-                                                     'https://fptshop.com.vn/linh-kien/o-cung',
-                                                     'https://fptshop.com.vn/linh-kien/nguon-may-tinh',
-                                                     'https://fptshop.com.vn/linh-kien/vo-case',
-                                                     'https://fptshop.com.vn/linh-kien/tan-nhiet',
-                                                     'https://fptshop.com.vn/linh-kien/o-dia-quang']}
-                ]
+categories = [
+    {'name': 'Laptop', 
+     'links' : ['https://fptshop.com.vn/may-tinh-xach-tay?sort=ban-chay-nhat&trang=1000']},
+    {'name': 'Desktop', 
+     'links' : ['https://fptshop.com.vn/may-tinh-de-ban?sort=ban-chay-nhat&trang=100']},
+    {'name': 'PhuKien', 
+     'links' : ['https://fptshop.com.vn/man-hinh?sort=ban-chay-nhat&trang=1000',
+                'https://fptshop.com.vn/phu-kien/the-nho',
+                'https://fptshop.com.vn/phu-kien/tai-nghe',
+                'https://fptshop.com.vn/phu-kien/usb-o-cung',
+                'https://fptshop.com.vn/phu-kien/chuot',
+                'https://fptshop.com.vn/phu-kien/ban-phim',
+                'https://fptshop.com.vn/phu-kien/balo-tui-xach']},
+    {'name' : 'LinhKien', 
+     'links' : ['https://fptshop.com.vn/linh-kien/mainboard',
+                'https://fptshop.com.vn/linh-kien/cpu',
+                'https://fptshop.com.vn/linh-kien/vga',
+                'https://fptshop.com.vn/linh-kien/ram',
+                'https://fptshop.com.vn/linh-kien/o-cung',
+                'https://fptshop.com.vn/linh-kien/nguon-may-tinh',
+                'https://fptshop.com.vn/linh-kien/vo-case',
+                'https://fptshop.com.vn/linh-kien/tan-nhiet',
+                'https://fptshop.com.vn/linh-kien/o-dia-quang']}
+]
 
 def expand_see_more_button(browser, cater):
     while True:
@@ -64,7 +69,7 @@ def scroll_to_lazy(browser):
         #     time.sleep(0.02)
         #     browser.implicitly_wait(20)
 
-def get_list_cate(database, cate):
+def get_list_cate(database, cate, used_spreadsheet):
     product_list = []
     browser = webdriver.Chrome()
     for link in cate['links']:
@@ -98,9 +103,12 @@ def get_list_cate(database, cate):
             name = product.select_one('h3').get_text().strip()
             # print(name)
             price = product.select_one('.progress, .product_progress, .product_main-price, .price')
-            if price != None:
-                price = price.get_text()
-                price = int(price.replace('.', '').replace('đ','').split()[0])                
+            if price == None or price == 0:
+                continue
+            
+            price = price.get_text()
+            price = int(price.replace('.', '').replace('đ','').split()[0])         
+                   
 
             img_tag = product.select_one('img')
             if img_tag != None:
@@ -116,16 +124,17 @@ def get_list_cate(database, cate):
             # print(price)
             
             # print("\n######################################################################\n")
-    database.update_with_data(product_list, cate['name'])
-    database.remove_duplicate(database.categories_id[cate['name']])
-    database.sort_sheet_by_price(database.categories_id[cate['name']], cate['name'])
+    cates_id = database.switch_spreadsheet_id(used_spreadsheet)
+    database.update_with_data(product_list, cate['name'], used_spreadsheet)
+    database.remove_duplicate(cates_id[cate['name']])
     print('######################################' + web_url + ' ' + cate['name'] + ' FINISHED')
+    browser.quit()
     return product_list
        
 
 ##Cách 2: Lấy search
-def get_list_fpt(database):
-    _thread.run_multi_thread_cate(categories, database, get_list_cate)
+def get_list_fpt(database, used_spreadsheet):
+    _thread.run_multi_thread_cate(categories, database, used_spreadsheet, get_list_cate)
 
 
 

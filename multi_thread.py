@@ -24,11 +24,10 @@ def hacom_crawler():
 # def fpt_crawler():
 #     fpt_data = fpt_scraper.get_list_fpt(ggsheet)
 
-# Create two threads for the two crawlers
-def run_multi_thread_cate(categories, database, function):
+def run_multi_thread_cate(categories, database, used_spreadsheet, function):
     threads = []
     for cate in categories:
-        t = threading.Thread(target=function, args=(database, cate))
+        t = threading.Thread(target=function, args=(database, cate, used_spreadsheet))
         threads.append(t)
 
     for t in threads:
@@ -38,10 +37,10 @@ def run_multi_thread_cate(categories, database, function):
     for t in threads:
         t.join()
 
-def run_multi_thread_web(web_func_list, database):
+def run_multi_thread_web(web_func_list, database, used_spreadsheet):
     threads = []
     for web_func in web_func_list:
-        t = threading.Thread(target=web_func, args=[database])
+        t = threading.Thread(target=web_func, args=[database, used_spreadsheet])
         threads.append(t)
 
     for t in threads:
