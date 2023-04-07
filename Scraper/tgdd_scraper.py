@@ -50,7 +50,7 @@ def expand_see_more_button(browser):
         except:
             break # If the button can no longer be located, break out of the loop
 
-def get_list_tgdd(database):
+def get_list_tgdd(database, used_spreadsheet):
     #Open Chrome browser
     browser = webdriver.Chrome()
 
@@ -82,12 +82,14 @@ def get_list_tgdd(database):
                 else:
                     img_link = img_tag['data-src']
                 price = product.find('a', {'class' : 'main-contain'}, {'target' : '_self'}).get('data-price')
+                if price == None or price == 0:
+                    continue
                 price = int(price.replace('.', ' ').split()[0])
 
                 product_list.append([name, price, web_url + link, img_link])
 
-                # if 'Laptop Dell Inspiron 16 5620 i5 1235U' in name:
-                #     print(product)
+                # if 'Laptop MSI Gaming Pulse GL66 11UDK i7 11800H/16GB/512GB/4GB RTX3050Ti/144Hz/Balo/Chuột/Win10 (816VN)' in name:
+                #     print(product)               
                 # if 'HP Pavilion 15 eg2088TU' in name:
                 #     print(product)
                 # print(web_url + link)
@@ -97,9 +99,10 @@ def get_list_tgdd(database):
                 # print("\n######################################################################\n")
         
         # ggs.store_in_db(product_list, cate['name'])
-        database.update_with_data(product_list, cate['name'])
-        database.remove_duplicate(database.switch_spreadsheet_id()[cate['name']])
-        print('#################################' + web_url + ' ' + cate['name'] + ' FINISHED')
+        cates_id = database.switch_spreadsheet_id(used_spreadsheet)
+        database.update_with_data(product_list, cate['name'], used_spreadsheet)
+        database.remove_duplicate(cates_id[cate['name']])
+        print('######################################' + web_url + ' ' + cate['name'] + ' FINISHED')
 
     browser.quit()        
 
