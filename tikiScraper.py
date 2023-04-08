@@ -19,9 +19,11 @@ catergories = [
     {'name': 'LinhKien',
      'links': ['https://tiki.vn/linh-kien-may-tinh-phu-kien-may-tinh/c8129']},
     {'name': 'PhuKien', 
-     'links' : ['https://tiki.vn/thiet-bi-van-phong-thiet-bi-ngoai-vi/c12884',
+     'links' : ['https://tiki.vn/man-hinh-may-tinh/c2665',
+                'https://tiki.vn/phan-mem-may-tinh/c6255'
                 'https://tiki.vn/thiet-bi-luu-tru/c8060',
-                'https://tiki.vn/thiet-bi-mang/c2663',]}
+                'https://tiki.vn/thiet-bi-mang/c2663',
+                'https://tiki.vn/he-thong-tan-nhiet/c28902']}
     ]
 
 def extractProductInfo(prod_html, prod_selector):
