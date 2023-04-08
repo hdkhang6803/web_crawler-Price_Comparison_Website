@@ -1,6 +1,7 @@
 from GoogleSheet import GoogleSheet
 import phongVuScrapper
 import cellphonesScraper
+import tikiScraper
 
 # spreadsheet_id = '1hLWC7ZgIkdN6JFHlzGCJrHEqmPnFUYugwFxx32sbb0o'
 
@@ -23,6 +24,7 @@ categories_id = {
     "PhuKien": 1048996747,
 }
 
+
 ggsheet = GoogleSheet(spreadsheet_id, cred_file)
-cellphonesScraper.scrape_all(ggsheet, categories_id)
-print('Cellphones.com.vn has been scraped successfully!')
+tikiScraper.scrape_all(ggsheet, categories_id)
+print('Tiki.com.vn has been scraped successfully!')
