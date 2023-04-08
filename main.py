@@ -1,3 +1,6 @@
+from GoogleSheet import GoogleSheet
+import Scraper.phongVuScraper as phongVuScraper
+import Scraper.hacomScraper as hacomScraper
 import multi_thread as _thread
 import threading
 from GoogleSheet import GoogleSheet as ggs
@@ -12,6 +15,23 @@ cred_file = 'client_secret.json'
 
 ggsheet = ggs(id=spreadsheet_id, cred_file=cred_file)
 
+if __name__ == "__main__":
+    ggsheet = GoogleSheet(spreadsheet_id, cred_file)
+    # hacomScraper.scrape_all(ggsheet)
+    # hacomScraper.get_products_url('https://hacom.vn/linh-kien-may-tinh?page=25')
+    # training_data = ggsheet.get_data(10, 4, "Laptop")
+
+    # phongvudata = phongVuScraper.get_products_url("https://phongvu.vn/c/man-hinh-may-tinh?page=4", 1)
+    # print(phongvudata)
+    # print(phongvudata)
+    # fptdata = fpt.get_list("laptop")
+
+    # # print(phongvudata)
+
+    # # change category to update different product type sheet
+    # category = "Laptop"
+    # ggsheet.update_with_data(phongvudata, category)
+    # ggsheet.remove_duplicate(categories_id[category])
 file = open("active_spreadsheet.txt", "r+")
 active_spreadsheet = file.read()
 used_spreadsheet =  int(not(int(active_spreadsheet, base=2)))

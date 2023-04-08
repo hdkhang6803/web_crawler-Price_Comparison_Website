@@ -93,11 +93,22 @@ class GoogleSheet:
                                                               range=sheetName + "!A1", valueInputOption="RAW", body=value_range_body)
         response = request.execute()
 
-    def sort_sheet_by_price(self, sheet_id, cate_name, used_spreadsheet):
-        sheet_name = get_used_spreadsheet_name(cate_name, used_spreadsheet)
+  def get_data(self, rows_start, rows_end, cols, sheetName = ""):
+    range = sheetName + "!R" + str(rows_start) + "C1:R" + str(rows_end) + "C" + str(cols)
+    request = self.service.spreadsheets().values().get(spreadsheetId=self.id, range=range)
+    response = request.execute()
+    return response
 
-        end_row = self.get_row_num(sheet_name)
-        # print(end_row)
+  def get_data(self, rows_start, rows_end, cols, sheetName = ""):
+    range = sheetName + "!R" + str(rows_start) + "C1:R" + str(rows_end) + "C" + str(cols)
+    request = self.service.spreadsheets().values().get(spreadsheetId=self.id, range=range)
+    response = request.execute()
+    return response
+
+  def sort_sheet_by_price(self, sheet_id, sheet_name):
+    sheet_range = f"{sheet_name}!A2:A"
+    result = self.service.spreadsheets().values().get(spreadsheetId=self.id, range=sheet_range).execute()
+    end_row = len(result.get('values', []))
 
         # Create the sort request body
         sort_request_body = {
