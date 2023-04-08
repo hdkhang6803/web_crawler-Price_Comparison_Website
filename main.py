@@ -5,7 +5,7 @@ import Scraper.fpt_scraper as fpt
 import Scraper.tgdd_scraper as tgdd
 import Scraper.cellphones_scraper as cellp
 import Scraper.tiki_scraper as tiki
-from datetime import datetime
+import time
 
 spreadsheet_id = '1H5TTOdrTC_T7U7k_ejCUG8BZWn97NuaxD0t4F7LwH8g'
 cred_file = 'client_secret.json'
@@ -18,16 +18,62 @@ used_spreadsheet =  int(not(int(active_spreadsheet, base=2)))
 
 ggsheet.clear_sheets(used_spreadsheet)
 
-web_func_list_1 = [fpt.get_list_fpt]
-web_func_list_2 = [tgdd.get_list_tgdd]
-web_func_list_3 = [cellp.get_list_cellphones]
-web_func_list_4 = [tiki.get_list_tiki]
 
+web_thread_func_list = [tiki.get_list_tiki, fpt.get_list_fpt, tgdd.get_list_tgdd, cellp.get_list_cellphones]
+print('2')
+waiting_threads = []
+for web_thread_func in web_thread_func_list:
+    thread = web_thread_func(ggsheet, used_spreadsheet)
+    waiting_threads = waiting_threads + thread
+# print(threads)
+max_thread_per_time = 4
+# start first 4 threads
+running_threads = []
+next_running_index = 0
+for i in range(max_thread_per_time):
+    print(waiting_threads[i])
+    t = waiting_threads[i].start()
+    print(t)
+    running_threads.append(waiting_threads[i])
+    next_running_index += 1
+
+
+while len(waiting_threads) > 0:
+    print(len(waiting_threads))
+    for thread in (running_threads):
+        print('checked' + str(thread) + ' ******* ' + str(next_running_index))
+        #if a running thread is finished, remove it and add in new thread
+        if not thread.is_alive():
+            running_threads.remove(thread)
+            waiting_threads.remove(thread)
+            next_running_index -= 1
+            next_thread =  waiting_threads[max(next_running_index, 0)]
+            if not next_thread.is_alive():
+                next_thread.start()
+                print(str(len(running_threads)) + ' **** ' + str(len(waiting_threads)) + ' ---- ' + str(waiting_threads[next_running_index]))
+                running_threads.append(waiting_threads[next_running_index])
+            next_running_index = (next_running_index + 1) % len(waiting_threads)
+    time.sleep(2.5)
+    
 try:
-    # _thread.run_multi_thread_web(web_func_list_1, ggsheet, used_spreadsheet)
-    # _thread.run_multi_thread_web(web_func_list_2, ggsheet, used_spreadsheet)
-    # _thread.run_multi_thread_web(web_func_list_3, ggsheet, used_spreadsheet)
-    _thread.run_multi_thread_web(web_func_list_4, ggsheet, used_spreadsheet)
+    
+
+
+        # # check which threads have finished
+        # for thread in threads:
+        #     if thread.is_alive():
+        #         print('waiting for ' + str(thread))
+        #         thread.join()
+        #     if not thread.is_alive():
+        #         threads.remove(thread)
+        #         print("Thread joined")
+
+        #         # start a new thread if there are still threads waiting
+        #         if threads:
+        #             threads[0].start()
+        #         break
+
+
     for cate in ['Laptop', 'Desktop', 'PhuKien', 'LinhKien']:
         ggsheet.sort_sheet_by_price(ggsheet.switch_spreadsheet_id(used_spreadsheet)[cate], cate, used_spreadsheet)
     print("Data fetching successfully")

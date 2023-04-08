@@ -27,7 +27,6 @@ categories = [
                 'https://cellphones.com.vn/phu-kien/may-tinh-laptop/phan-mem.html',
                 'https://cellphones.com.vn/phu-kien/may-tinh-laptop/webcam.html',
                 'https://cellphones.com.vn/phu-kien/may-tinh-laptop/de-tan-nhiet.html',
-                'https://cellphones.com.vn/phu-kien/thiet-bi-mang.html',
                 'https://cellphones.com.vn/thiet-bi-am-thanh.html',
                 'https://cellphones.com.vn/man-hinh.html']}
     ]
@@ -100,7 +99,7 @@ def get_products_in_category(database, category, used_spreadsheet):
     database.remove_duplicate(cates_id[category['name']])
     print('######################################' + 'https://cellphones.com.vn/' + ' ' + category['name'] + ' FINISHED')
     driver.quit()
-    return product_list
+    # return product_list
 
 def scrape_all(database, categories_id):
     for cat in categories:
@@ -114,7 +113,7 @@ def scrape_all(database, categories_id):
         print('Removed duplicates on', cat['name'], '\n')
 
 def get_list_cellphones(database, used_spreadsheet):
-    _thread.run_multi_thread_cate(database, categories, used_spreadsheet, get_products_in_category)
+    return(_thread.run_multi_thread_cate(database, categories, used_spreadsheet, get_products_in_category))
 
 
 

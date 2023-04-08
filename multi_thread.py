@@ -23,12 +23,13 @@ def run_multi_thread_cate(database, categories, used_spreadsheet, function):
         t = threading.Thread(target=function, args=(database, cate, used_spreadsheet))
         threads.append(t)
 
-    for t in threads:
-        t.start()
+    # for t in threads:
+    #     t.start()
 
-    # Wait for all of the threads to finish
-    for t in threads:
-        t.join()
+    # # Wait for all of the threads to finish
+    # for t in threads:
+    #     t.join()
+    return threads
 
 def run_multi_thread_web(web_func_list, database, used_spreadsheet):
     threads = []

@@ -129,17 +129,18 @@ def get_list_cate(database, cate, used_spreadsheet):
     database.remove_duplicate(cates_id[cate['name']])
     print('######################################' + web_url + ' ' + cate['name'] + ' FINISHED')
     browser.quit()
-    return product_list
+    # return product_list
        
 
-##Cách 2: Lấy search
+
 def get_list_fpt(database, used_spreadsheet):
-    _thread.run_multi_thread_cate(database, categories, used_spreadsheet, get_list_cate)
+    return (_thread.run_multi_thread_cate(database, categories, used_spreadsheet, get_list_cate))
 
 
 
 
-
+##Cách 2: Lấy search
+# def get_list_fpt(database, used_spreadsheet):
 # browser = webdriver.Chrome()
 # browser.get('https://fptshop.com.vn/linh-kien/ram')
 # browser.maximize_window()

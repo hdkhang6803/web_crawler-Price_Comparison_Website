@@ -6,6 +6,7 @@ import time
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import GoogleSheet as ggs
+import threading
 
 web_url = 'https://www.thegioididong.com'
 
@@ -50,7 +51,7 @@ def expand_see_more_button(browser):
         except:
             break # If the button can no longer be located, break out of the loop
 
-def get_list_tgdd(database, used_spreadsheet):
+def scrape_all(database, used_spreadsheet):
     #Open Chrome browser
     browser = webdriver.Chrome()
 
@@ -106,7 +107,10 @@ def get_list_tgdd(database, used_spreadsheet):
 
     browser.quit()        
 
-    
+def get_list_tgdd(database, used_spreadsheet):
+    t = []
+    t.append(threading.Thread(target=scrape_all, args=(database, used_spreadsheet)))
+    return t
 
 
 
