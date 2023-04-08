@@ -24,15 +24,14 @@ ggsheet.clear_sheets(used_spreadsheet)
 
 
 web_thread_func_list = [
-    hacom.get_list_hacom,
-    pvu.get_list_pvu,
+    # hacom.get_list_hacom,
+    # pvu.get_list_pvu,
     # tiki.get_list_tiki,
     # fpt.get_list_fpt, 
-    # tgdd.get_list_tgdd, 
+    tgdd.get_list_tgdd, 
     # cellp.get_list_cellphones
 ]
 
-print('2')
 waiting_threads = []
 for web_thread_func in web_thread_func_list:
     thread = web_thread_func(ggsheet, used_spreadsheet)
@@ -42,10 +41,8 @@ max_thread_per_time = 4
 # start first 4 threads
 running_threads = []
 next_running_index = 0
-for i in range(max_thread_per_time):
-    print(waiting_threads[i])
+for i in range(min(max_thread_per_time, len(waiting_threads))):
     t = waiting_threads[i].start()
-    print(t)
     running_threads.append(waiting_threads[i])
     next_running_index += 1
 
@@ -59,6 +56,8 @@ while len(waiting_threads) > 0:
             running_threads.remove(thread)
             waiting_threads.remove(thread)
             next_running_index -= 1
+            if next_running_index >= len(waiting_threads):
+                break
             next_thread =  waiting_threads[next_running_index]
             if not next_thread.is_alive():
                 next_thread.start()
@@ -66,7 +65,11 @@ while len(waiting_threads) > 0:
                 running_threads.append(waiting_threads[next_running_index])
             next_running_index = (next_running_index + 1) % len(waiting_threads)
     time.sleep(2.5)
-    
+
+
+for cate in ['Laptop', 'Desktop', 'PhuKien', 'LinhKien']:
+    ggsheet.sort_sheet_by_price(ggsheet.switch_spreadsheet_id(used_spreadsheet)[cate], cate, used_spreadsheet)
+
 try:
     
 
@@ -86,8 +89,6 @@ try:
         #         break
 
 
-    for cate in ['Laptop', 'Desktop', 'PhuKien', 'LinhKien']:
-        ggsheet.sort_sheet_by_price(ggsheet.switch_spreadsheet_id(used_spreadsheet)[cate], cate, used_spreadsheet)
     print("Data fetching successfully")
     # file.seek(0)
     # file.truncate()
