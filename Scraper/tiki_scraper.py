@@ -42,7 +42,7 @@ def extractProductInfo(prod_html, prod_selector):
     
     return []
 
-def get_products_in_category(database, category, used_spreadsheet):
+def get_products_in_category_tiki(database, category, used_spreadsheet):
     driver = webdriver.Chrome()
     product_list = []
     common_prod_selector = product_selector(
@@ -79,7 +79,7 @@ def get_products_in_category(database, category, used_spreadsheet):
 def scrape_all(database, categories_id):
     for cat in categories:
         print('---- Started crawling', cat['name'], '----')
-        product_list = get_products_in_category(cat)
+        product_list = get_products_in_category_tiki(cat)
         print('Finished crawling', cat['name'], '-', 
               len(product_list), 'products scraped.')
         # database.update_with_data(product_list, cat['name'])
@@ -88,7 +88,7 @@ def scrape_all(database, categories_id):
         print('Removed duplicates on', cat['name'], '\n')
 
 def get_list_tiki(database, used_spreadsheet):
-    return (_thread.run_multi_thread_cate(database,categories,  used_spreadsheet, get_products_in_category))
+    return (_thread.run_multi_thread_cate(database,categories,  used_spreadsheet, get_products_in_category_tiki))
 
 
 

@@ -69,7 +69,7 @@ def scroll_to_lazy(browser):
         #     time.sleep(0.02)
         #     browser.implicitly_wait(20)
 
-def get_list_cate(database, cate, used_spreadsheet):
+def get_list_cate_fpt(database, cate, used_spreadsheet):
     product_list = []
     browser = webdriver.Chrome()
     for link in cate['links']:
@@ -134,7 +134,7 @@ def get_list_cate(database, cate, used_spreadsheet):
 
 
 def get_list_fpt(database, used_spreadsheet):
-    return (_thread.run_multi_thread_cate(database, categories, used_spreadsheet, get_list_cate))
+    return (_thread.run_multi_thread_cate(database, categories, used_spreadsheet, get_list_cate_fpt))
 
 
 

@@ -1,6 +1,7 @@
 # Import necessary libraries
 from selenium import webdriver
 from bs4 import BeautifulSoup
+import multi_thread as _thread
 
 domain = 'https://phongvu.vn'
 
@@ -8,15 +9,15 @@ domain = 'https://phongvu.vn'
 driver_path = './chromedriver/chromedriver.exe'
 
 categories = [
-                {'name': 'Laptop_1', 'links' : [
+                {'name': 'Laptop', 'links' : [
                     'https://phongvu.vn/c/laptop',
                     'https://phongvu.vn/c/macbook',
                 ]},
-                {'name': 'Desktop_1', 'links' : [
+                {'name': 'Desktop', 'links' : [
                     'https://phongvu.vn/c/pc',
                     'https://phongvu.vn/c/pc-apple',
                 ]},
-                {'name': 'PhuKien_1', 'links' : [
+                {'name': 'PhuKien', 'links' : [
                     'https://phongvu.vn/c/sac-cap-apple',
                     'https://phongvu.vn/c/airpods',
                     'https://phongvu.vn/c/tai-nghe-apple-beats',
@@ -32,7 +33,7 @@ categories = [
                     'https://phongvu.vn/c/loa',
                     'https://phongvu.vn/c/microphone'
                 ]},
-                {'name': 'LinhKien_1', 'links' : [
+                {'name': 'LinhKien', 'links' : [
                     'https://phongvu.vn/c/linh-kien-may-tinh',
                 ]}
             ]
@@ -91,7 +92,7 @@ def div_to_product(product_div):
 
     return [title, price, link, img_link]
 
-def get_products_url(url, max_page = 100):
+def get_products_url(driver, url, max_page = 100):
     # page number
     i = 0 
     # products array
@@ -101,12 +102,6 @@ def get_products_url(url, max_page = 100):
     # error product count
     error_product_cnt = 0
     error_link = []
-
-    # Initialize the webdriver
-    options = webdriver.ChromeOptions()
-    options.add_experimental_option('excludeSwitches', ['enable-logging'])
-
-    driver = webdriver.Chrome(executable_path=driver_path, options = options)
 
     # Load the website
     while True:
@@ -130,8 +125,8 @@ def get_products_url(url, max_page = 100):
             print("no products with the tag found")
             break
 
-        print("PAGE: ", i)
-        print("Url: ", cururl)
+        # print("PAGE: ", i)
+        # print("Url: ", cururl)
         for product_div in product_divs:
             tmp = div_to_product(product_div)
             if (tmp != None):
@@ -150,25 +145,48 @@ def get_products_url(url, max_page = 100):
             # product = site_to_product(soup, link)
             # products.append(product)
 
-        print(error_product_cnt)
+        # print(error_product_cnt)
 
     # Close the webdriver
     # print(len(prod))
     driver.quit()
 
-    print(url, " errors count: ", error_product_cnt)
-    if (error_product_cnt > 0):
-        print(error_link)
+    # print(url, " errors count: ", error_product_cnt)
+    # if (error_product_cnt > 0):
+    #     print(error_link)
     return products
 
 def scrape_all(ggsheet):
     for cate in categories:
         for link in cate['links']:
             products = get_products_url(link)
-            ggsheet.update_with_data(products, cate["name"])
-            ggsheet.remove_duplicate(ggsheet.categories_id[cate["name"]])
+            print(products)
+            # ggsheet.update_with_data(products, cate["name"])
+            # ggsheet.remove_duplicate(ggsheet.categories_id[cate["name"]])
             print(link, "successful!")
 
+#KHANG's function
+def get_list_cate_pvu(database, cate, used_spreadsheet):
+    #initialize webdriver
+    options = webdriver.ChromeOptions()
+    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+
+    driver = webdriver.Chrome(executable_path=driver_path, options = options)
+
+    #get products of each category
+    global product_list
+    product_list = []
+    for link in cate['links']:
+        product_list = product_list + get_products_url(driver, link)
+    cates_id = database.switch_spreadsheet_id(used_spreadsheet)
+    database.update_with_data(product_list, cate['name'], used_spreadsheet)
+    database.remove_duplicate(cates_id[cate['name']])
+    print('######################################' + 'phongvu.vn' + ' ' + cate['name'] + ' FINISHED')
+    
+
+# getProduct("thinkpad")
+def get_list_pvu(database, used_spreadsheet):
+    return(_thread.run_multi_thread_cate(database, categories, used_spreadsheet, get_list_cate_pvu))
 
 # getProduct("")
 

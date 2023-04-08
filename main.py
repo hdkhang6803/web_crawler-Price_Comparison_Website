@@ -1,6 +1,4 @@
 from GoogleSheet import GoogleSheet
-import Scraper.phongVuScraper as phongVuScraper
-import Scraper.hacomScraper as hacomScraper
 import multi_thread as _thread
 import threading
 from GoogleSheet import GoogleSheet as ggs
@@ -8,6 +6,8 @@ import Scraper.fpt_scraper as fpt
 import Scraper.tgdd_scraper as tgdd
 import Scraper.cellphones_scraper as cellp
 import Scraper.tiki_scraper as tiki
+import Scraper.hacom_scraper as hacom
+import Scraper.phongvu_scraper as pvu
 import time
 
 spreadsheet_id = '1H5TTOdrTC_T7U7k_ejCUG8BZWn97NuaxD0t4F7LwH8g'
@@ -15,23 +15,7 @@ cred_file = 'client_secret.json'
 
 ggsheet = ggs(id=spreadsheet_id, cred_file=cred_file)
 
-if __name__ == "__main__":
-    ggsheet = GoogleSheet(spreadsheet_id, cred_file)
-    # hacomScraper.scrape_all(ggsheet)
-    # hacomScraper.get_products_url('https://hacom.vn/linh-kien-may-tinh?page=25')
-    # training_data = ggsheet.get_data(10, 4, "Laptop")
 
-    # phongvudata = phongVuScraper.get_products_url("https://phongvu.vn/c/man-hinh-may-tinh?page=4", 1)
-    # print(phongvudata)
-    # print(phongvudata)
-    # fptdata = fpt.get_list("laptop")
-
-    # # print(phongvudata)
-
-    # # change category to update different product type sheet
-    # category = "Laptop"
-    # ggsheet.update_with_data(phongvudata, category)
-    # ggsheet.remove_duplicate(categories_id[category])
 file = open("active_spreadsheet.txt", "r+")
 active_spreadsheet = file.read()
 used_spreadsheet =  int(not(int(active_spreadsheet, base=2)))
@@ -39,7 +23,15 @@ used_spreadsheet =  int(not(int(active_spreadsheet, base=2)))
 ggsheet.clear_sheets(used_spreadsheet)
 
 
-web_thread_func_list = [tiki.get_list_tiki, fpt.get_list_fpt, tgdd.get_list_tgdd, cellp.get_list_cellphones]
+web_thread_func_list = [
+    hacom.get_list_hacom,
+    pvu.get_list_pvu,
+    # tiki.get_list_tiki,
+    # fpt.get_list_fpt, 
+    # tgdd.get_list_tgdd, 
+    # cellp.get_list_cellphones
+]
+
 print('2')
 waiting_threads = []
 for web_thread_func in web_thread_func_list:
@@ -63,11 +55,11 @@ while len(waiting_threads) > 0:
     for thread in (running_threads):
         print('checked' + str(thread) + ' ******* ' + str(next_running_index))
         #if a running thread is finished, remove it and add in new thread
-        if not thread.is_alive():
+        if not thread.is_alive() and len(waiting_threads) > 0:
             running_threads.remove(thread)
             waiting_threads.remove(thread)
             next_running_index -= 1
-            next_thread =  waiting_threads[max(next_running_index, 0)]
+            next_thread =  waiting_threads[next_running_index]
             if not next_thread.is_alive():
                 next_thread.start()
                 print(str(len(running_threads)) + ' **** ' + str(len(waiting_threads)) + ' ---- ' + str(waiting_threads[next_running_index]))
@@ -97,15 +89,15 @@ try:
     for cate in ['Laptop', 'Desktop', 'PhuKien', 'LinhKien']:
         ggsheet.sort_sheet_by_price(ggsheet.switch_spreadsheet_id(used_spreadsheet)[cate], cate, used_spreadsheet)
     print("Data fetching successfully")
-    file.seek(0)
-    file.truncate()
-    file.write(str(used_spreadsheet))
+    # file.seek(0)
+    # file.truncate()
+    # file.write(str(used_spreadsheet))
     file.close()
 except:
     print("Data fetching failed!")
     file.close()
 
-#SWITCH ACTIVE SPREADSHEET TO NEWLY CRAWLED SPREADSHEET
+# #SWITCH ACTIVE SPREADSHEET TO NEWLY CRAWLED SPREADSHEET
 
 
 

@@ -1,8 +1,6 @@
 import threading
 # import Scraper.tgdd_scraper as tgdd_scraper
 # import Scraper.fpt_scraper as fpt_scraper
-import Scraper.phongVuScraper as phongVuScraper
-import Scraper.hacomScraper as hacomScraper
 
 from GoogleSheet import GoogleSheet
 import pandas as pd
@@ -14,12 +12,6 @@ ggsheet = GoogleSheet(spreadsheet_id, cred_file)
 
 # def tgdd_crawler():
 #     tgdd_data = tgdd_scraper.get_list_tgdd(ggsheet)
-   
-def phongVu_crawler():
-    phongVuScraper.scrape_all(ggsheet)
-    
-def hacom_crawler():
-    hacomScraper.scrape_all(ggsheet)
 
 # def fpt_crawler():
 #     fpt_data = fpt_scraper.get_list_fpt(ggsheet)
@@ -50,11 +42,6 @@ def run_multi_thread_web(web_func_list, database, used_spreadsheet):
     # Wait for all of the threads to finish
     for t in threads:
         t.join()
-# # Create two threads for the two crawlers
-# tgdd_thread = threading.Thread(target=tgdd_crawler)
-# fpt_thread = threading.Thread(target=fpt_crawler)
-phongVu_thread = threading.Thread(target=phongVu_crawler)
-hacom_thread = threading.Thread(target=hacom_crawler)
 
 # # Start the threads
 # tgdd_thread.start()
@@ -63,14 +50,5 @@ hacom_thread = threading.Thread(target=hacom_crawler)
 # # Wait for the threads to finish before proceeding
 # tgdd_thread.join()
 # fpt_thread.join()
-
-def startCrawl():
-    phongVu_thread.start()
-    hacom_thread.start()
-
-    phongVu_thread.join()
-    hacom_thread.join()
-
-startCrawl()
 
 # ggsheet_database.store_in_db(df)
