@@ -8,43 +8,26 @@ from googleapiclient.errors import HttpError
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
 
+# def get_used_spreadsheet_name(cate_name, used_spreadsheet):
+#     sheet_name = cate_name
+#     if used_spreadsheet == 0:
+#         sheet_name = sheet_name + '_0'
+#     else:
+#         sheet_name = sheet_name + '_1'
 
-
-
-def get_used_spreadsheet_name(cate_name, used_spreadsheet):
-    sheet_name = cate_name
-    if used_spreadsheet == 0:
-        sheet_name = sheet_name + '_0'
-    else:
-        sheet_name = sheet_name + '_1'
-    return sheet_name
-
+def get_active_sheet():
+    with open("active_spreadsheet.txt", "r+") as file:
+        active_spreadsheet = file.read()
+        used_spreadsheet =  int(not(int(active_spreadsheet, base=2)))
+        return used_spreadsheet
 
 class GoogleSheet:
-    def get_row_num(self, sheet_name):
-        sheet_range = f"{sheet_name}!A1:A"
-        result = self.service.spreadsheets().values().get(
-            spreadsheetId=self.id, range=sheet_range).execute()
-        end_row = len(result.get('values', []))
-        return end_row
-    
-    def switch_spreadsheet_id(self, used_spreadsheet):
-        global categories_id
-        if used_spreadsheet == 1:
-            categories_id = {
-                "Laptop": 679621757,
-                "Desktop": 885273009,
-                "LinhKien": 1480180086,
-                "PhuKien": 1048996747,
-            }
-        else:
-            categories_id = {
-                "Laptop": 1701054025,
-                "Desktop": 0,
-                "LinhKien": 732831781,
-                "PhuKien": 1913667635,
-            }
-        return categories_id
+    categories_id = {
+        "Laptop": 679621757,
+        "Desktop": 885273009,
+        "LinhKien": 1480180086,
+        "PhuKien": 1048996747,
+    }
 
     def __init__(self, id, cred_file):
         self.id = id
@@ -52,7 +35,47 @@ class GoogleSheet:
             cred_file, scopes=SCOPES)
         self.service = build('sheets', 'v4', credentials=self.__creds)
 
-    def remove_duplicate(self, sheet_id=0):
+        self.active_spreadsheet = get_active_sheet()
+        self.switch_spreadsheet_id(self.active_spreadsheet)
+
+    def get_row_num(self, sheet_name):
+        sheet_range = f"{sheet_name}!A1:A"
+        result = self.service.spreadsheets().values().get(
+            spreadsheetId=self.id, range=sheet_range).execute()
+        end_row = len(result.get('values', []))
+        return end_row
+    
+    def get_used_spreadsheet_name(self, category):
+        self.active_spreadsheet = get_active_sheet()
+        sheet_name = category
+        if self.active_spreadsheet == 0:
+            sheet_name = sheet_name + '_0'
+        else:
+            sheet_name = sheet_name + '_1'
+        return sheet_name
+            
+    def switch_spreadsheet_id(self, used_spreadsheet):
+        if used_spreadsheet == 1:
+            self.categories_id = {
+                "Laptop": 679621757,
+                "Desktop": 885273009,
+                "LinhKien": 1480180086,
+                "PhuKien": 1048996747,
+            }
+        else:
+            self.categories_id = {
+                "Laptop": 1701054025,
+                "Desktop": 0,
+                "LinhKien": 732831781,
+                "PhuKien": 1913667635,
+            }
+        # return categories_id
+
+    def get_id_of_cate(self, category):
+        return self.categories_id[category]
+
+    def remove_duplicate(self, category):
+        sheet_id = self.get_id_of_cate(category)
         batch_update_spreadsheet_request_body = {
             "requests": [
                 {
@@ -81,34 +104,31 @@ class GoogleSheet:
             spreadsheetId=self.id, body=batch_update_spreadsheet_request_body)
         response = request.execute()
 
-    def update_with_data(self, data, cate_name, used_spreadsheet):
+    def update_with_data(self, data, category):
         value_range_body = {
             "majorDimension": "DIMENSION_UNSPECIFIED",
             "values": data
         }
 
-        sheetName = get_used_spreadsheet_name(cate_name, used_spreadsheet)
+        sheetName = self.get_used_spreadsheet_name(category)
 
         request = self.service.spreadsheets().values().append(spreadsheetId=self.id,
                                                               range=sheetName + "!A1", valueInputOption="RAW", body=value_range_body)
         response = request.execute()
 
-  def get_data(self, rows_start, rows_end, cols, sheetName = ""):
-    range = sheetName + "!R" + str(rows_start) + "C1:R" + str(rows_end) + "C" + str(cols)
-    request = self.service.spreadsheets().values().get(spreadsheetId=self.id, range=range)
-    response = request.execute()
-    return response
+    def get_data(self, rows_start, rows_end, cols, category = ""):
+        sheetName = self.get_used_spreadsheet_name(category)
 
-  def get_data(self, rows_start, rows_end, cols, sheetName = ""):
-    range = sheetName + "!R" + str(rows_start) + "C1:R" + str(rows_end) + "C" + str(cols)
-    request = self.service.spreadsheets().values().get(spreadsheetId=self.id, range=range)
-    response = request.execute()
-    return response
+        range = sheetName + "!R" + str(rows_start) + "C1:R" + str(rows_end) + "C" + str(cols)
+        request = self.service.spreadsheets().values().get(spreadsheetId=self.id, range=range)
+        response = request.execute()
+        return response
 
-  def sort_sheet_by_price(self, sheet_id, sheet_name):
-    sheet_range = f"{sheet_name}!A2:A"
-    result = self.service.spreadsheets().values().get(spreadsheetId=self.id, range=sheet_range).execute()
-    end_row = len(result.get('values', []))
+    def sort_sheet_by_price(self, sheet_id, category):
+        sheet_name = self.get_used_spreadsheet_name(category)
+        sheet_range = f"{sheet_name}!A2:A"
+        result = self.service.spreadsheets().values().get(spreadsheetId=self.id, range=sheet_range).execute()
+        end_row = len(result.get('values', []))
 
         # Create the sort request body
         sort_request_body = {
@@ -140,19 +160,16 @@ class GoogleSheet:
         response = request.execute()
         print(f"Sheet '{sheet_name}' sorted by price.")
 
-    def clear_sheets(self, used_spreadsheet):
+    def clear_sheets(self, category):
         # Get sheet properties
         sheet_metadata = self.service.spreadsheets().get(spreadsheetId=self.id).execute()
         sheet_properties = sheet_metadata['sheets']
         
-        sheet_name_to_del_list = ["Laptop", "Desktop", "LinhKien", "PhuKien"]
-        global suffix 
-        suffix = ""
-        if used_spreadsheet == 0:
-            suffix = "_0"
-        else:
-            suffix = "_1"
-        sheet_name_to_del_list = [sheet_name + suffix for sheet_name in sheet_name_to_del_list]
+        # ?????
+        # sheet_name_to_del_list = ["Laptop", "Desktop", "LinhKien", "PhuKien"]
+        sheet_name_to_del_list = list(self.categories_id.keys())
+        
+        sheet_name_to_del_list = [self.get_used_spreadsheet_name(sheet_name) for sheet_name in sheet_name_to_del_list]
 
         # Loop through all sheets and clear values
         for sheet in sheet_properties:

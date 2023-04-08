@@ -7,7 +7,7 @@ import threading
 import time
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException, ElementNotInteractableException, MoveTargetOutOfBoundsException
-from GoogleSheet import GoogleSheet
+from DataStructures.GoogleSheet import GoogleSheet
 web_url = 'https://fptshop.com.vn/'
 
 categories = [

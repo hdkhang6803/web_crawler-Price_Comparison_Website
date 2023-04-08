@@ -4,7 +4,7 @@ import threading
 import Scraper.phongVuScraper as phongVuScraper
 import Scraper.hacomScraper as hacomScraper
 
-from GoogleSheet import GoogleSheet
+from DataStructures.GoogleSheet import GoogleSheet
 import pandas as pd
 
 spreadsheet_id = '1H5TTOdrTC_T7U7k_ejCUG8BZWn97NuaxD0t4F7LwH8g'
@@ -63,13 +63,13 @@ hacom_thread = threading.Thread(target=hacom_crawler)
 # tgdd_thread.join()
 # fpt_thread.join()
 
-def startCrawl():
-    phongVu_thread.start()
-    hacom_thread.start()
+# def startCrawl():
+#     phongVu_thread.start()
+#     hacom_thread.start()
 
-    phongVu_thread.join()
-    hacom_thread.join()
+#     phongVu_thread.join()
+#     hacom_thread.join()
 
-startCrawl()
+# startCrawl()
 
 # ggsheet_database.store_in_db(df)

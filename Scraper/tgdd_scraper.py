@@ -5,7 +5,7 @@ from selenium.webdriver.common.by import By
 import time
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import GoogleSheet as ggs
+import DataStructures.GoogleSheet as ggs
 
 web_url = 'https://www.thegioididong.com'
 
