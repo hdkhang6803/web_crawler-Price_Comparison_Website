@@ -22,8 +22,8 @@ catergories = [
      'links' : ['https://tiki.vn/man-hinh-may-tinh/c2665',
                 'https://tiki.vn/phan-mem-may-tinh/c6255'
                 'https://tiki.vn/thiet-bi-luu-tru/c8060',
-                'https://tiki.vn/thiet-bi-mang/c2663',
-                'https://tiki.vn/he-thong-tan-nhiet/c28902']}
+                'https://tiki.vn/he-thong-tan-nhiet/c28902',
+                'https://tiki.vn/adapter-sac-laptop/c28920']}
     ]
 
 def extractProductInfo(prod_html, prod_selector):
