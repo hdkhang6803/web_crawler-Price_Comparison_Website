@@ -2,6 +2,7 @@
 from selenium import webdriver
 from bs4 import BeautifulSoup
 import multi_thread as _thread
+import threading
 
 domain = 'https://phongvu.vn'
 
@@ -166,21 +167,26 @@ def scrape_all(ggsheet):
 
 #KHANG's function
 def get_list_cate_pvu(database, cate):
-    #initialize webdriver
-    options = webdriver.ChromeOptions()
-    options.add_experimental_option('excludeSwitches', ['enable-logging'])
+    try:
+        #initialize webdriver
+        options = webdriver.ChromeOptions()
+        options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
-    driver = webdriver.Chrome(executable_path=driver_path, options = options)
+        driver = webdriver.Chrome(executable_path=driver_path, options = options)
 
-    #get products of each category
-    global product_list
-    product_list = []
-    for link in cate['links']:
-        product_list = product_list + get_products_url(driver, link)
-    database.update_with_data(product_list, cate['name'])
-    database.remove_duplicate(cate['name'])
-    print('######################################' + ' PHONG VU ' + ' ' + cate['name'] + ' FINISHED' + '-----' + str(len(product_list)))
-    driver.quit()
+        #get products of each category
+        global product_list
+        product_list = []
+        for link in cate['links']:
+            product_list = product_list + get_products_url(driver, link)
+        database.update_with_data(product_list, cate['name'])
+        database.remove_duplicate(cate['name'])
+        print('######################################' + ' PHONG VU ' + ' ' + cate['name'] + ' FINISHED' + '-----' + str(len(product_list)))
+        driver.quit()
+        _thread.threads_status_dict[threading.current_thread()] = [0, get_list_cate_pvu, cate]
+    except Exception as e:
+        _thread.threads_status_dict[threading.current_thread()] = [-1, get_list_cate_pvu, cate]
+        print(e)
     
 
 # getProduct("thinkpad")

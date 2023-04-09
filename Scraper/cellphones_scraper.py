@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from time import sleep
 import re
 import multi_thread as _thread
+import threading
 
 class product_selector:
     def __init__(self, card, link, title, price, image):
@@ -22,7 +23,6 @@ categories = [
      'links': ['https://cellphones.com.vn/linh-kien.html']},
     {'name': 'PhuKien', 
      'links' : ['https://cellphones.com.vn/phu-kien/may-tinh-laptop.html',
-                'https://cellphones.com.vn/phu-kien/thiet-bi-mang.html',
                 'https://cellphones.com.vn/thiet-bi-am-thanh.html',
                 'https://cellphones.com.vn/man-hinh.html']}
 ]
@@ -67,33 +67,38 @@ def extractProductInfo(prod_html, prod_selector):
     return []
 
 def get_products_in_category_cphones(database, category):
-    driver = webdriver.Chrome()
-    product_list = []
-    common_prod_selector = product_selector(
-        'div.product-info-container.product-item .product-info',
-        '.product__link', 
-        'div.product__name h3',
-        '.box-info__box-price p.product__price--show', 
-        '.product__image img')
+    try:
+        driver = webdriver.Chrome()
+        product_list = []
+        common_prod_selector = product_selector(
+            'div.product-info-container.product-item .product-info',
+            '.product__link', 
+            'div.product__name h3',
+            '.box-info__box-price p.product__price--show', 
+            '.product__image img')
 
-    for link in category['links']:
-        driver.get(link)
-        show_more(driver, 
-            '.button.btn-show-more', # show_more_selector
-            '.cancel-button-top', # remove_ad_selector
-            '.ins-web-opt-in-reminder-close-button') # close_reminder_selector
-        html_text = driver.page_source
-        html_content = BeautifulSoup(html_text, 'html.parser')
-        
-        products = html_content.select(common_prod_selector.card)
-        for product in products:
-            pro_info = extractProductInfo(product, common_prod_selector)
-            product_list.append(pro_info)
-        print('Scraped', link, '-', len(product_list), category['name'])
-    database.update_with_data(product_list, category['name'])
-    database.remove_duplicate(category['name'])
-    print('######################################' + ' CELLPHONES ' + ' ' + category['name'] + ' FINISHED' + '-----' + str(len(product_list)))
-    driver.quit()
+        for link in category['links']:
+            driver.get(link)
+            show_more(driver, 
+                '.button.btn-show-more', # show_more_selector
+                '.cancel-button-top', # remove_ad_selector
+                '.ins-web-opt-in-reminder-close-button') # close_reminder_selector
+            html_text = driver.page_source
+            html_content = BeautifulSoup(html_text, 'html.parser')
+            
+            products = html_content.select(common_prod_selector.card)
+            for product in products:
+                pro_info = extractProductInfo(product, common_prod_selector)
+                product_list.append(pro_info)
+            print('Scraped', link, '-', len(product_list), category['name'])
+        database.update_with_data(product_list, category['name'])
+        database.remove_duplicate(category['name'])
+        print('######################################' + ' CELLPHONES ' + ' ' + category['name'] + ' FINISHED' + '-----' + str(len(product_list)))
+        driver.quit()
+        _thread.threads_status_dict[threading.current_thread()] = [0, get_products_in_category_cphones, category]
+    except Exception as e:
+        _thread.threads_status_dict[threading.current_thread()] = [-1, get_products_in_category_cphones, category]
+        print(e)
     # return product_list
 
 def scrape_all(database, categories_id):

@@ -4,6 +4,8 @@ from selenium.webdriver.common.by import By
 from time import sleep
 import re
 import multi_thread as _thread
+import threading
+
 class product_selector:
     def __init__(self, card, title, price, image):
         self.card = card
@@ -46,36 +48,41 @@ def extractProductInfo(prod_html, prod_selector):
     return []
 
 def get_products_in_category_tiki(database, category):
-    driver = webdriver.Chrome()
-    product_list = []
-    common_prod_selector = product_selector(
-        '.product-item',
-        'div.name h3',
-        '.price-discount__price', 
-        'img')
+    try:
+        driver = webdriver.Chrome()
+        product_list = []
+        common_prod_selector = product_selector(
+            '.product-item',
+            'div.name h3',
+            '.price-discount__price', 
+            'img')
 
-    for link in category['links']:
-        i = 0 
-        while True:
-            i = i + 1
-            pagelink = link + '?page=' + str(i)
-            driver.get(pagelink)
-            # sleep(0.25)
-            html_text = driver.page_source
-            html_content = BeautifulSoup(html_text, 'html.parser')
-            
-            products = html_content.select(common_prod_selector.card)
-            if len(products) == 0: break
+        for link in category['links']:
+            i = 0 
+            while True:
+                i = i + 1
+                pagelink = link + '?page=' + str(i)
+                driver.get(pagelink)
+                # sleep(0.25)
+                html_text = driver.page_source
+                html_content = BeautifulSoup(html_text, 'html.parser')
+                
+                products = html_content.select(common_prod_selector.card)
+                if len(products) == 0: break
 
-            for product in products:
-                pro_info = extractProductInfo(product, common_prod_selector)
-                product_list.append(pro_info)
-            # print('Scraped', pagelink, '-', len(category_dictionary), category['name'])
-            sleep(0.5)
-    database.update_with_data(product_list, category['name'])
-    database.remove_duplicate(category['name'])
-    print('######################################' + ' TIKI ' + ' ' + category['name'] + ' FINISHED' + '-----' + str(len(product_list)))
-    driver.quit()
+                for product in products:
+                    pro_info = extractProductInfo(product, common_prod_selector)
+                    product_list.append(pro_info)
+                # print('Scraped', pagelink, '-', len(category_dictionary), category['name'])
+                sleep(0.5)
+        database.update_with_data(product_list, category['name'])
+        database.remove_duplicate(category['name'])
+        print('######################################' + ' TIKI ' + ' ' + category['name'] + ' FINISHED' + '-----' + str(len(product_list)))
+        driver.quit()
+        _thread.threads_status_dict[threading.current_thread()] = [0, get_products_in_category_tiki, category]
+    except Exception as e:
+        _thread.threads_status_dict[threading.current_thread()] = [-1, get_products_in_category_tiki, category]
+        print(e)
     # return product_list
 
 def scrape_all(database, categories_id):
