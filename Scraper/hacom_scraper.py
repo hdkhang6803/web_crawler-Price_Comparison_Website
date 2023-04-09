@@ -164,7 +164,7 @@ def get_products_url(driver, url, max_page = 100):
         # print(error_product_cnt)
     # Close the webdriver
     # print(len(prod))
-    driver.quit()
+    
 
     # print(url, " errors count: ", error_product_cnt)
     # if (error_product_cnt > 0):
@@ -182,26 +182,28 @@ def scrape_all(ggsheet):
             # ggsheet.remove_duplicate(ggsheet.categories_id[cate["name"]])
             print(link, "successful!")
 
-def get_list_cate_hacom(database, cate, used_spreadsheet):
+def get_list_cate_hacom(database, cate):
     #initialize webdriver
     options = webdriver.ChromeOptions()
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
     driver = webdriver.Chrome(executable_path=driver_path, options = options)
 
+    # driver = webdriver.Chrome()
+
     #get products of each category
     global product_list
     for link in cate['links']:
         product_list = get_products_url(driver, link)
-    cates_id = database.switch_spreadsheet_id(used_spreadsheet)
-    database.update_with_data(product_list, cate['name'], used_spreadsheet)
-    database.remove_duplicate(cates_id[cate['name']])
-    print('######################################' + 'hacom.vn' + ' ' + cate['name'] + ' FINISHED')
+    database.update_with_data(product_list, cate['name'])
+    database.remove_duplicate(cate['name'])
+    print('######################################' + 'hacom.vn' + ' ' + cate['name'] + ' FINISHED' + '-----' + str(len(product_list)))
+    driver.quit()
     
 
 # getProduct("thinkpad")
-def get_list_hacom(database, used_spreadsheet):
-    return(_thread.run_multi_thread_cate(database, categories, used_spreadsheet, get_list_cate_hacom))
+def get_list_hacom(database):
+    return(_thread.run_multi_thread_cate(database, categories, get_list_cate_hacom))
 
 # --------------------------- not updated --------------------------
 def get_products_search(productName):

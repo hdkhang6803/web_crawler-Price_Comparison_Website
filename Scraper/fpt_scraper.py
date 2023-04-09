@@ -7,7 +7,7 @@ import threading
 import time
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException, ElementNotInteractableException, MoveTargetOutOfBoundsException
-from GoogleSheet import GoogleSheet
+from DataStructures.GoogleSheet import GoogleSheet
 web_url = 'https://fptshop.com.vn/'
 
 categories = [
@@ -69,7 +69,7 @@ def scroll_to_lazy(browser):
         #     time.sleep(0.02)
         #     browser.implicitly_wait(20)
 
-def get_list_cate_fpt(database, cate, used_spreadsheet):
+def get_list_cate_fpt(database, cate):
     product_list = []
     browser = webdriver.Chrome()
     for link in cate['links']:
@@ -124,17 +124,16 @@ def get_list_cate_fpt(database, cate, used_spreadsheet):
             # print(price)
             
             # print("\n######################################################################\n")
-    cates_id = database.switch_spreadsheet_id(used_spreadsheet)
-    database.update_with_data(product_list, cate['name'], used_spreadsheet)
-    database.remove_duplicate(cates_id[cate['name']])
-    print('######################################' + web_url + ' ' + cate['name'] + ' FINISHED')
+    database.update_with_data(product_list, cate['name'])
+    database.remove_duplicate(cate['name'])
+    print('######################################' + 'FPT' + ' ' + cate['name'] + ' FINISHED' + '-----' + str(len(product_list)))
     browser.quit()
     # return product_list
        
 
 
-def get_list_fpt(database, used_spreadsheet):
-    return (_thread.run_multi_thread_cate(database, categories, used_spreadsheet, get_list_cate_fpt))
+def get_list_fpt(database):
+    return (_thread.run_multi_thread_cate(database, categories, get_list_cate_fpt))
 
 
 

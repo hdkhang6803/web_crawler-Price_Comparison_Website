@@ -1,0 +1,11 @@
+acer
+asus
+dell
+hp
+lenovo
+msi
+apple
+macbook
+LG
+microsoft
+surface

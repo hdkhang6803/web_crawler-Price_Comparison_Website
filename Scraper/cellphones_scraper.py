@@ -17,19 +17,15 @@ categories = [
     {'name': 'Laptop', 
      'links' : ['https://cellphones.com.vn/laptop.html']},
     {'name': 'Desktop', 
-     'links' : ['https://cellphones.com.vn/may-tinh-de-ban/lap-rap.html',
-                'https://cellphones.com.vn/may-tinh-de-ban/all-in-one.html',
-                'https://cellphones.com.vn/may-tinh-de-ban/dong-bo.html']},
+     'links' : ['https://cellphones.com.vn/may-tinh-de-ban.html']},
     {'name': 'LinhKien',
      'links': ['https://cellphones.com.vn/linh-kien.html']},
     {'name': 'PhuKien', 
-     'links' : ['https://cellphones.com.vn/phu-kien/chuot-ban-phim-may-tinh.html',
-                'https://cellphones.com.vn/phu-kien/may-tinh-laptop/phan-mem.html',
-                'https://cellphones.com.vn/phu-kien/may-tinh-laptop/webcam.html',
-                'https://cellphones.com.vn/phu-kien/may-tinh-laptop/de-tan-nhiet.html',
+     'links' : ['https://cellphones.com.vn/phu-kien/may-tinh-laptop.html',
+                'https://cellphones.com.vn/phu-kien/thiet-bi-mang.html',
                 'https://cellphones.com.vn/thiet-bi-am-thanh.html',
                 'https://cellphones.com.vn/man-hinh.html']}
-    ]
+]
 
 def show_more(driver, show_more_selector, remove_ad_selector, close_reminder_selector):
     while True:
@@ -70,7 +66,7 @@ def extractProductInfo(prod_html, prod_selector):
             return [title, price, link, img]
     return []
 
-def get_products_in_category_cphones(database, category, used_spreadsheet):
+def get_products_in_category_cphones(database, category):
     driver = webdriver.Chrome()
     product_list = []
     common_prod_selector = product_selector(
@@ -94,10 +90,9 @@ def get_products_in_category_cphones(database, category, used_spreadsheet):
             pro_info = extractProductInfo(product, common_prod_selector)
             product_list.append(pro_info)
         print('Scraped', link, '-', len(product_list), category['name'])
-    cates_id = database.switch_spreadsheet_id(used_spreadsheet)
-    database.update_with_data(product_list, category['name'], used_spreadsheet)
-    database.remove_duplicate(cates_id[category['name']])
-    print('######################################' + 'https://cellphones.com.vn/' + ' ' + category['name'] + ' FINISHED')
+    database.update_with_data(product_list, category['name'])
+    database.remove_duplicate(category['name'])
+    print('######################################' + ' CELLPHONES ' + ' ' + category['name'] + ' FINISHED' + '-----' + str(len(product_list)))
     driver.quit()
     # return product_list
 
@@ -112,8 +107,8 @@ def scrape_all(database, categories_id):
         # database.remove_duplicate(categories_id[cat['name']])
         print('Removed duplicates on', cat['name'], '\n')
 
-def get_list_cellphones(database, used_spreadsheet):
-    return(_thread.run_multi_thread_cate(database, categories, used_spreadsheet, get_products_in_category_cphones))
+def get_list_cellphones(database):
+    return(_thread.run_multi_thread_cate(database, categories, get_products_in_category_cphones))
 
 
 

@@ -149,7 +149,6 @@ def get_products_url(driver, url, max_page = 100):
 
     # Close the webdriver
     # print(len(prod))
-    driver.quit()
 
     # print(url, " errors count: ", error_product_cnt)
     # if (error_product_cnt > 0):
@@ -166,7 +165,7 @@ def scrape_all(ggsheet):
             print(link, "successful!")
 
 #KHANG's function
-def get_list_cate_pvu(database, cate, used_spreadsheet):
+def get_list_cate_pvu(database, cate):
     #initialize webdriver
     options = webdriver.ChromeOptions()
     options.add_experimental_option('excludeSwitches', ['enable-logging'])
@@ -178,15 +177,15 @@ def get_list_cate_pvu(database, cate, used_spreadsheet):
     product_list = []
     for link in cate['links']:
         product_list = product_list + get_products_url(driver, link)
-    cates_id = database.switch_spreadsheet_id(used_spreadsheet)
-    database.update_with_data(product_list, cate['name'], used_spreadsheet)
-    database.remove_duplicate(cates_id[cate['name']])
-    print('######################################' + 'phongvu.vn' + ' ' + cate['name'] + ' FINISHED')
+    database.update_with_data(product_list, cate['name'])
+    database.remove_duplicate(cate['name'])
+    print('######################################' + ' PHONG VU ' + ' ' + cate['name'] + ' FINISHED' + '-----' + str(len(product_list)))
+    driver.quit()
     
 
 # getProduct("thinkpad")
-def get_list_pvu(database, used_spreadsheet):
-    return(_thread.run_multi_thread_cate(database, categories, used_spreadsheet, get_list_cate_pvu))
+def get_list_pvu(database):
+    return(_thread.run_multi_thread_cate(database, categories, get_list_cate_pvu))
 
 # getProduct("")
 

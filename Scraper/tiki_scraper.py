@@ -19,9 +19,12 @@ categories = [
     {'name': 'LinhKien',
      'links': ['https://tiki.vn/linh-kien-may-tinh-phu-kien-may-tinh/c8129']},
     {'name': 'PhuKien', 
-     'links' : ['https://tiki.vn/thiet-bi-luu-tru/c8060']
-    }
-    ]
+     'links' : ['https://tiki.vn/man-hinh-may-tinh/c2665',
+                'https://tiki.vn/phan-mem-may-tinh/c6255'
+                'https://tiki.vn/thiet-bi-luu-tru/c8060',
+                'https://tiki.vn/he-thong-tan-nhiet/c28902',
+                'https://tiki.vn/adapter-sac-laptop/c28920']}
+]
 
 def extractProductInfo(prod_html, prod_selector):
     title = prod_html.select_one(prod_selector.title).get_text().strip()
@@ -42,7 +45,7 @@ def extractProductInfo(prod_html, prod_selector):
     
     return []
 
-def get_products_in_category_tiki(database, category, used_spreadsheet):
+def get_products_in_category_tiki(database, category):
     driver = webdriver.Chrome()
     product_list = []
     common_prod_selector = product_selector(
@@ -69,10 +72,9 @@ def get_products_in_category_tiki(database, category, used_spreadsheet):
                 product_list.append(pro_info)
             # print('Scraped', pagelink, '-', len(category_dictionary), category['name'])
             sleep(0.5)
-    cates_id = database.switch_spreadsheet_id(used_spreadsheet)
-    database.update_with_data(product_list, category['name'], used_spreadsheet)
-    database.remove_duplicate(cates_id[category['name']])
-    print('######################################' + 'tiki.vn/' + ' ' + category['name'] + ' FINISHED')
+    database.update_with_data(product_list, category['name'])
+    database.remove_duplicate(category['name'])
+    print('######################################' + ' TIKI ' + ' ' + category['name'] + ' FINISHED' + '-----' + str(len(product_list)))
     driver.quit()
     # return product_list
 
@@ -87,8 +89,8 @@ def scrape_all(database, categories_id):
         # database.remove_duplicate(categories_id[cat['name']])
         print('Removed duplicates on', cat['name'], '\n')
 
-def get_list_tiki(database, used_spreadsheet):
-    return (_thread.run_multi_thread_cate(database,categories,  used_spreadsheet, get_products_in_category_tiki))
+def get_list_tiki(database):
+    return (_thread.run_multi_thread_cate(database,categories, get_products_in_category_tiki))
 
 
 
