@@ -9,22 +9,22 @@ domain = 'https://hacom.vn'
 driver_path = './chromedriver/chromedriver.exe'
 
 categories = [
-                {'name': 'Laptop_1', 'links' : [
+                {'name': 'Laptop', 'links' : [
                     'https://hacom.vn/laptop',
                 ]},
-                {'name': 'Desktop_1', 'links' : [
+                {'name': 'Desktop', 'links' : [
                     'https://hacom.vn/may-tinh-de-ban', 
                     'https://hacom.vn/pc-gaming-streaming',
                     "https://hacom.vn/pc-do-hoa-render-hnc",
                     'https://hacom.vn/may-tram-hang',
                     'https://hacom.vn/may-chu-hang'
                 ]},
-                {'name': 'LinhKien_1', 'links' : [
+                {'name': 'LinhKien', 'links' : [
                     'https://hacom.vn/linh-kien-may-tinh',
                     'https://hacom.vn/linh-kien-laptop',
                     'https://hacom.vn/quat-tan-nhiet',
                 ]},
-                {'name': 'PhuKien_1', 'links' : [
+                {'name': 'PhuKien', 'links' : [
                     'https://hacom.vn/linh-phu-kien-laptop',
                     'https://hacom.vn/day-cap-cac-loai',
                     'https://hacom.vn/thiet-bi-chuyen-doi',
@@ -180,12 +180,18 @@ def get_products_url(url, max_page = 100):
 
 def scrape_all(ggsheet):
     for cate in categories:
+        cate_count = 0
         for link in cate['links']:
             products = get_products_url(link)
+            cate_count += len(products)
             ggsheet.update_with_data(products, cate["name"])
-            ggsheet.remove_duplicate(ggsheet.categories_id[cate["name"]])
+            ggsheet.remove_duplicate(cate["name"])
             print(link, "successful!")
-
+        with open("result.txt", "a+") as f:
+            f.write("HACOM")
+            f.write(cate["name"])
+            f.write(str(cate_count))
+            f.write("----")
 # getProduct("thinkpad")
 
 # --------------------------- not updated --------------------------
