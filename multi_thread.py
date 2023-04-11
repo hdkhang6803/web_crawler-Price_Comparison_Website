@@ -10,11 +10,11 @@ import Scraper.phongvu_scraper as pvu
 
 web_thread_func_list = [
     hacom.get_list_hacom,
-    # pvu.get_list_pvu,
-    # tiki.get_list_tiki,
-    # fpt.get_list_fpt, 
-    # tgdd.get_list_tgdd, 
-    # cellp.get_list_cellphones
+    pvu.get_list_pvu,
+    tiki.get_list_tiki,
+    fpt.get_list_fpt, 
+    tgdd.get_list_tgdd, 
+    cellp.get_list_cellphones
 ]
 
 

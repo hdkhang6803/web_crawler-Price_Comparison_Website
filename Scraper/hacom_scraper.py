@@ -149,8 +149,8 @@ def get_products_url(driver, url, max_page = 100):
             else:
                 error_product_cnt += 1
                 error_link.append([cururl, product_div])
-
-            
+        # print(products)
+        # print(str(len(products)) + ' ----- ' + str(cururl))
 
             # driver.get(link)
             # # Extract the HTML source code of the website
@@ -186,20 +186,20 @@ def scrape_all(ggsheet):
 def get_list_cate_hacom(database, cate):
     try:
         #initialize webdriver
-        options = webdriver.ChromeOptions()
-        options.add_experimental_option('excludeSwitches', ['enable-logging'])
+        # options = webdriver.ChromeOptions()
+        # options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
-        driver = webdriver.Chrome(executable_path=driver_path, options = options)
-
-        # driver = webdriver.Chrome()
+        # driver = webdriver.Chrome(executable_path=driver_path, options = options)
+        driver = webdriver.Chrome()
 
         #get products of each category
         global product_list
+        product_list = []
         for link in cate['links']:
-            product_list = get_products_url(driver, link)
+            product_list = product_list + get_products_url(driver, link)
         database.update_with_data(product_list, cate['name'])
         database.remove_duplicate(cate['name'])
-        print('######################################' + 'hacom.vn' + ' ' + cate['name'] + ' FINISHED' + '-----' + str(len(product_list)))
+        print('######################################' + ' HACOM ' + ' ' + cate['name'] + ' FINISHED' + '-----' + str(len(product_list)))
         driver.quit()
         _thread.threads_status_dict[threading.current_thread()] = [0, get_list_cate_hacom, cate]
     except Exception as e:
@@ -210,7 +210,6 @@ def get_list_cate_hacom(database, cate):
 # getProduct("thinkpad")
 def get_list_hacom(database):
     return(_thread.run_multi_thread_cate(database, categories, get_list_cate_hacom))
-
 # --------------------------- not updated --------------------------
 def get_products_search(productName):
     url = domain + '/tim?q=' + productName + '&page='

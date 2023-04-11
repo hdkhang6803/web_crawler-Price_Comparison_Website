@@ -169,11 +169,12 @@ def scrape_all(ggsheet):
 def get_list_cate_pvu(database, cate):
     try:
         #initialize webdriver
-        options = webdriver.ChromeOptions()
-        options.add_experimental_option('excludeSwitches', ['enable-logging'])
+        # options = webdriver.ChromeOptions()
+        # options.add_experimental_option('excludeSwitches', ['enable-logging'])
 
-        driver = webdriver.Chrome(executable_path=driver_path, options = options)
-
+        # driver = webdriver.Chrome(executable_path=driver_path, options = options)
+        driver = webdriver.Chrome()
+        
         #get products of each category
         global product_list
         product_list = []
