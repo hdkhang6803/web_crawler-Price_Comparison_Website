@@ -126,7 +126,7 @@ def get_list_cate_fpt(database, cate):
                 # print(price)
                 
                 # print("\n######################################################################\n")
-        database.update_with_data(product_list, cate['name'])
+            database.update_with_data(product_list, cate['name'])
         database.remove_duplicate(cate['name'])
         print('######################################' + 'FPT' + ' ' + cate['name'] + ' FINISHED' + '-----' + str(len(product_list)))
         browser.quit()

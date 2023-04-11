@@ -90,8 +90,8 @@ def get_products_in_category_cphones(database, category):
             for product in products:
                 pro_info = extractProductInfo(product, common_prod_selector)
                 product_list.append(pro_info)
+            database.update_with_data(product_list, category['name'])
             print('Scraped', link, '-', len(product_list), category['name'])
-        database.update_with_data(product_list, category['name'])
         database.remove_duplicate(category['name'])
         print('######################################' + ' CELLPHONES ' + ' ' + category['name'] + ' FINISHED' + '-----' + str(len(product_list)))
         driver.quit()

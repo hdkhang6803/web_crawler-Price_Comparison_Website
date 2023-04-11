@@ -196,8 +196,9 @@ def get_list_cate_hacom(database, cate):
         global product_list
         product_list = []
         for link in cate['links']:
-            product_list = product_list + get_products_url(driver, link)
-        database.update_with_data(product_list, cate['name'])
+            product_list = get_products_url(driver, link)
+            database.update_with_data(product_list, cate['name'])
+        
         database.remove_duplicate(cate['name'])
         print('######################################' + ' HACOM ' + ' ' + cate['name'] + ' FINISHED' + '-----' + str(len(product_list)))
         driver.quit()
