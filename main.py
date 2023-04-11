@@ -14,7 +14,8 @@ cred_file = 'client_secret.json'
 ggsheet = GoogleSheet(spreadsheet_id, cred_file)
 # ggsheet.clear_sheets(ggsheet.spreadsheet_for_scrape)
 
-thread_.run_threads(ggsheet)
+is_success = thread_.run_threads(ggsheet)
+print('success: ' + str(is_success))
 for cate in ['Laptop', 'Desktop', 'PhuKien', 'LinhKien']:
     ggsheet.sort_sheet_by_price(ggsheet.categories_id[cate], cate)
 
@@ -24,13 +25,11 @@ for cate in ['Laptop', 'Desktop', 'PhuKien', 'LinhKien']:
     # file.seek(0)
     # file.truncate()
     # file.write(str(ggsheet.spreadsheet_for_scrape))
-print("Data fetching successfully")
 
-try:
-    print('f')
-except Exception as e:
-    print("Data fetching failed!")
-    print("Error: " + e)
+if is_success == 1:
+    print("Data fetching successfully")
+else:
+    print("Data failed")
 
 # #SWITCH ACTIVE SPREADSHEET TO NEWLY CRAWLED SPREADSHEET HERE
 print("Execute time: --- %s seconds ---" % (time.time() - start_time))

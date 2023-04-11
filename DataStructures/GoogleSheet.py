@@ -81,6 +81,7 @@ class GoogleSheet:
         return self.categories_id[category]
 
     def remove_duplicate(self, category):
+        end_row = self.get_row_num()
         sheet_id = self.get_id_of_cate(category)
         batch_update_spreadsheet_request_body = {
             "requests": [
@@ -91,7 +92,7 @@ class GoogleSheet:
                             "startColumnIndex": 0,
                             "endColumnIndex": 4,
                             "startRowIndex": 0,
-                            "endRowIndex": 2000
+                            "endRowIndex": end_row
                         },
                         "comparisonColumns": [
                             {

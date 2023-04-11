@@ -10,11 +10,11 @@ import Scraper.phongvu_scraper as pvu
 
 web_thread_func_list = [
     hacom.get_list_hacom,
-    pvu.get_list_pvu,
-    tiki.get_list_tiki,
-    fpt.get_list_fpt, 
-    tgdd.get_list_tgdd, 
-    cellp.get_list_cellphones
+    # pvu.get_list_pvu,
+    # tiki.get_list_tiki,
+    # fpt.get_list_fpt, 
+    # tgdd.get_list_tgdd, 
+    # cellp.get_list_cellphones
 ]
 
 
@@ -91,7 +91,13 @@ def run_threads(database, max_thread_per_time = 4):
             thread = threading.Thread(target=arg_list[1], args=(database, arg_list[2]))
             waiting_threads = waiting_threads + [thread]
     if len(waiting_threads) > 0:
-        check_running_thread_add_new(waiting_threads, running_threads, next_running_index, max_thread_per_time)
+        try:
+            check_running_thread_add_new(waiting_threads, running_threads, next_running_index, max_thread_per_time)
+            return 1
+        except:
+            return 0
+        
     else:
         print('No exception found in the process!')
+        return 1
 
