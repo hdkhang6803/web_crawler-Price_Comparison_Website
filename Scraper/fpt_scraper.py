@@ -69,77 +69,85 @@ def scroll_to_lazy(browser):
         #     time.sleep(0.02)
         #     browser.implicitly_wait(20)
 
-def get_list_cate(database, cate, used_spreadsheet):
-    product_list = []
-    browser = webdriver.Chrome()
-    for link in cate['links']:
-        #Navigate to link
-        browser.get(link)
-        browser.maximize_window()
+func = None
+def get_list_cate_fpt(database, cate):
+    try:
+        product_list = []
+        browser = webdriver.Chrome()
+        for link in cate['links']:
+            #Navigate to link
+            browser.get(link)
+            browser.maximize_window()
 
-        #Remove ads
-        # Wait up to 10 seconds for the element to appear
-        # ad_remove = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@id='onesignal-slidedown-cancel-button']")))
+            #Remove ads
+            # Wait up to 10 seconds for the element to appear
+            # ad_remove = WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.XPATH, "//*[@id='onesignal-slidedown-cancel-button']")))
 
-        #Incase not fully expand product page
-        expand_see_more_button(browser, cate['name'])
+            #Incase not fully expand product page
+            expand_see_more_button(browser, cate['name'])
 
-        #scroll to lazy loaded element
-        scroll_to_lazy(browser)
+            #scroll to lazy loaded element
+            scroll_to_lazy(browser)
 
-        #parse the html text for content
-        html_text = browser.page_source
-        html_content = BeautifulSoup(html_text, 'lxml')
+            #parse the html text for content
+            html_text = browser.page_source
+            html_content = BeautifulSoup(html_text, 'lxml')
 
-        # products = html_content.select(create_css_tag()) 
-        products = html_content.select('.product-item, .cdt-product, .product__item, .cate-product')
+            # products = html_content.select(create_css_tag()) 
+            products = html_content.select('.product-item, .cdt-product, .product__item, .cate-product')
 
-        for product in products:
-            #get product info
-            # print(product)
-            link = product.find('a').get('href')
-            if web_url not in link:
-                link = web_url + link
-            name = product.select_one('h3').get_text().strip()
-            # print(name)
-            price = product.select_one('.progress, .product_progress, .product_main-price, .price')
-            if price == None or price == 0:
-                continue
-            
-            price = price.get_text()
-            price = int(price.replace('.', '').replace('đ','').split()[0])         
-                   
+            for product in products:
+                #get product info
+                # print(product)
+                link = product.find('a').get('href')
+                if web_url not in link:
+                    link = web_url + link
+                name = product.select_one('h3').get_text().strip()
+                # print(name)
+                price = product.select_one('.progress, .product_progress, .product_main-price, .price')
+                if price == None or price == 0:
+                    continue
+                
+                price = price.get_text()
+                price = int(price.replace('.', '').replace('đ','').split()[0])         
+                    
 
-            img_tag = product.select_one('img')
-            if img_tag != None:
-                img_link = img_tag.get('src')
-                if img_link is None:
-                    img_link = img_tag.get('data-src')
+                img_tag = product.select_one('img')
+                if img_tag != None:
+                    img_link = img_tag.get('src')
+                    if img_link is None:
+                        img_link = img_tag.get('data-src')
 
 
-            product_list.append([name, price, link, img_link])
+                product_list.append([name, price, link, img_link])
 
-            # print(web_url + link)
-            # print(name)
-            # print(price)
-            
-            # print("\n######################################################################\n")
-    cates_id = database.switch_spreadsheet_id(used_spreadsheet)
-    database.update_with_data(product_list, cate['name'], used_spreadsheet)
-    database.remove_duplicate(cates_id[cate['name']])
-    print('######################################' + web_url + ' ' + cate['name'] + ' FINISHED')
-    browser.quit()
-    return product_list
+                # print(web_url + link)
+                # print(name)
+                # print(price)
+                
+                # print("\n######################################################################\n")
+            database.update_with_data(product_list, cate['name'])
+        database.remove_duplicate(cate['name'])
+        print('######################################' + 'FPT' + ' ' + cate['name'] + ' FINISHED' + '-----' + str(len(product_list)))
+        browser.quit()
+        # return product_list
+        # func = get_list_cate_fpt
+        _thread.threads_status_dict[threading.current_thread()] = [0, get_list_cate_fpt, cate]
+    except Exception as e:
+        _thread.threads_status_dict[threading.current_thread()] = [-1, get_list_cate_fpt, cate]
+        print(e)
        
 
+
+
+def get_list_fpt(database):
+    return (_thread.run_multi_thread_cate(database, categories, get_list_cate_fpt))
+
+
+
+
 ##Cách 2: Lấy search
-def get_list_fpt(database, used_spreadsheet):
-    _thread.run_multi_thread_cate(categories, database, used_spreadsheet, get_list_cate)
-
-
-
-
-
+# def get_list_fpt(database, used_spreadsheet):
 # browser = webdriver.Chrome()
 # browser.get('https://fptshop.com.vn/linh-kien/ram')
 # browser.maximize_window()

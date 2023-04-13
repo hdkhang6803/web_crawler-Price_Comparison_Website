@@ -1,6 +1,8 @@
 # Import necessary libraries
 from selenium import webdriver
 from bs4 import BeautifulSoup
+import multi_thread as _thread
+import threading
 
 # TODO: update this file and PhongVuScraper so they use the same class
 domain = 'https://hacom.vn'
@@ -104,7 +106,7 @@ def div_to_product(product_div):
 
     return [title, price, link, img_link]
 
-def get_products_url(url, max_page = 100):
+def get_products_url(driver, url, max_page = 100):
     # page number
     i = 0 
     # products array
@@ -114,13 +116,7 @@ def get_products_url(url, max_page = 100):
     # error product count
     error_product_cnt = 0
     error_link = []
-
-    # Initialize the webdriver
-    options = webdriver.ChromeOptions()
-    options.add_experimental_option('excludeSwitches', ['enable-logging'])
-
-    driver = webdriver.Chrome(executable_path=driver_path, options = options)
-
+    
     # Load the website
     while True:
         i = i + 1
@@ -144,8 +140,8 @@ def get_products_url(url, max_page = 100):
             print("no products with the tag found")
             break
 
-        print("PAGE: ", i)
-        print("Url: ", cururl)
+        # print("PAGE: ", i)
+        # print("Url: ", cururl)
         for product_div in product_divs:
             tmp = div_to_product(product_div)
             if (tmp != None):
@@ -153,8 +149,8 @@ def get_products_url(url, max_page = 100):
             else:
                 error_product_cnt += 1
                 error_link.append([cururl, product_div])
-
-            
+        # print(products)
+        # print(str(len(products)) + ' ----- ' + str(cururl))
 
             # driver.get(link)
             # # Extract the HTML source code of the website
@@ -166,34 +162,55 @@ def get_products_url(url, max_page = 100):
             # product = site_to_product(soup, link)
             # if (product != None):
             #     products.append(product
-        print(error_product_cnt)
+        # print(error_product_cnt)
     # Close the webdriver
     # print(len(prod))
-    driver.quit()
+    
 
-    print(url, " errors count: ", error_product_cnt)
-    if (error_product_cnt > 0):
-        print(error_link)
+    # print(url, " errors count: ", error_product_cnt)
+    # if (error_product_cnt > 0):
+        # print(error_link)
     return products
 
 
 
 def scrape_all(ggsheet):
     for cate in categories:
-        cate_count = 0
         for link in cate['links']:
             products = get_products_url(link)
-            cate_count += len(products)
-            ggsheet.update_with_data(products, cate["name"])
-            ggsheet.remove_duplicate(cate["name"])
+            print(products)
+            # ggsheet.update_with_data(products, cate["name"])
+            # ggsheet.remove_duplicate(ggsheet.categories_id[cate["name"]])
             print(link, "successful!")
-        with open("result.txt", "a+") as f:
-            f.write("HACOM")
-            f.write(cate["name"])
-            f.write(str(cate_count))
-            f.write("----")
-# getProduct("thinkpad")
 
+def get_list_cate_hacom(database, cate):
+    try:
+        #initialize webdriver
+        # options = webdriver.ChromeOptions()
+        # options.add_experimental_option('excludeSwitches', ['enable-logging'])
+
+        # driver = webdriver.Chrome(executable_path=driver_path, options = options)
+        driver = webdriver.Chrome()
+
+        #get products of each category
+        global product_list
+        product_list = []
+        for link in cate['links']:
+            product_list = get_products_url(driver, link)
+            database.update_with_data(product_list, cate['name'])
+        
+        database.remove_duplicate(cate['name'])
+        print('######################################' + ' HACOM ' + ' ' + cate['name'] + ' FINISHED' + '-----' + str(len(product_list)))
+        driver.quit()
+        _thread.threads_status_dict[threading.current_thread()] = [0, get_list_cate_hacom, cate]
+    except Exception as e:
+        _thread.threads_status_dict[threading.current_thread()] = [-1, get_list_cate_hacom, cate]
+        print(e)
+    
+
+# getProduct("thinkpad")
+def get_list_hacom(database):
+    return(_thread.run_multi_thread_cate(database, categories, get_list_cate_hacom))
 # --------------------------- not updated --------------------------
 def get_products_search(productName):
     url = domain + '/tim?q=' + productName + '&page='
@@ -221,8 +238,8 @@ def get_products_search(productName):
 
         product_divs = soup.find_all('div', {'class': 'p-component item loaded'})
 
-        print("PAGE: ", i)
-        print("Url: ", cururl)
+        # print("PAGE: ", i)
+        # print("Url: ", cururl)
         for product_div in product_divs:
             # link = product_div.find('a', {'class': 'css-pxdb0j', 'target': '_self'}).get('href')
             link = product_div.find('div', class_='p-info').find('h3', class_='p-name').find('a')['href']

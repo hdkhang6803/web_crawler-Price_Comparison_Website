@@ -1,15 +1,12 @@
 from DataStructures.GoogleSheet import GoogleSheet
-# import multi_thread as _thread
-import threading
 from DataStructures.GoogleSheet import GoogleSheet as ggs
-import Scraper.fpt_scraper as fpt
-import Scraper.tgdd_scraper as tgdd
-import Scraper.phongVuScraper as phongVuScraper
-import Scraper.hacomScraper as hacomScraper
-from datetime import datetime
-
+import time
 from DataStructures.ProductClassifier import ProductClassifier
 from DataStructures.SearchEngine import SearchEngine
+from datetime import datetime
+import multi_thread as thread_
+import time
+start_time = time.time()
 
 spreadsheet_id = '1H5TTOdrTC_T7U7k_ejCUG8BZWn97NuaxD0t4F7LwH8g'
 cred_file = 'client_secret.json'
@@ -35,42 +32,25 @@ if __name__ == "__main__":
     # hacomScraper.get_products_url('https://hacom.vn/linh-kien-may-tinh?page=25')
     # training_data = ggsheet.get_data(10, 4, "Laptop")
 
-    # phongvudata = phongVuScraper.get_products_url("https://phongvu.vn/c/man-hinh-may-tinh?page=4", 1)
-    # print(phongvudata)
-    # print(phongvudata)
-    # fptdata = fpt.get_list("laptop")
+is_success = thread_.run_threads(ggsheet)
+print('success: ' + str(is_success))
+for cate in ['Laptop', 'Desktop', 'PhuKien', 'LinhKien']:
+    ggsheet.sort_sheet_by_price(ggsheet.categories_id[cate], cate)
 
-    # # print(phongvudata)
+#Switch active status to the new crawled spreadsheet
+# with open("active_spreadsheet.txt", "w") as file:
+#     print('open f')
+    # file.seek(0)
+    # file.truncate()
+    # file.write(str(ggsheet.spreadsheet_for_scrape))
 
-    # # change category to update different product type sheet
-    # category = "Laptop"
-    # ggsheet.update_with_data(phongvudata, category)
-    # ggsheet.remove_duplicate(categories_id[category])
-# file = open("active_spreadsheet.txt", "r+")
-# active_spreadsheet = file.read()
-# used_spreadsheet =  int(not(int(active_spreadsheet, base=2)))
+if is_success == 1:
+    print("Data fetching successfully")
+else:
+    print("Data failed")
 
-# ggsheet.clear_sheets(used_spreadsheet)
-
-# web_func_list_1 = [fpt.get_list_fpt]
-# web_func_list_2 = [tgdd.get_list_tgdd]
-
-# try:
-#     _thread.run_multi_thread_web(web_func_list_1, ggsheet, used_spreadsheet)
-#     _thread.run_multi_thread_web(web_func_list_2, ggsheet, used_spreadsheet)
-#     for cate in ['Laptop', 'Desktop', 'PhuKien', 'LinhKien']:
-#         ggsheet.sort_sheet_by_price(ggsheet.switch_spreadsheet_id(used_spreadsheet)[cate], cate, used_spreadsheet)
-#     print("Data fetching successfully")
-#     file.seek(0)
-#     file.truncate()
-#     file.write(str(used_spreadsheet))
-#     file.close()
-# except:
-#     print("Data fetching failed!")
-#     file.close()
-
-#SWITCH ACTIVE SPREADSHEET TO NEWLY CRAWLED SPREADSHEET
-
+# #SWITCH ACTIVE SPREADSHEET TO NEWLY CRAWLED SPREADSHEET HERE
+print("Execute time: --- %s seconds ---" % (time.time() - start_time))
 
 
 

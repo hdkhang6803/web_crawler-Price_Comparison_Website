@@ -15,11 +15,17 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 #     else:
 #         sheet_name = sheet_name + '_1'
 
-def get_active_sheet():
+def get_sheet_for_scrape():
     with open("active_spreadsheet.txt", "r+") as file:
         active_spreadsheet = file.read()
         used_spreadsheet =  int(not(int(active_spreadsheet, base=2)))
-        return used_spreadsheet
+        return used_spreadsheet      
+    
+def get_active_sheet():
+    with open("active_spreadsheet.txt", "r+") as file:
+        active_spreadsheet = file.read()
+        active_spreadsheet =  int(active_spreadsheet, base=2)
+        return active_spreadsheet
 
 class GoogleSheet:
     categories_id = {
@@ -35,8 +41,8 @@ class GoogleSheet:
             cred_file, scopes=SCOPES)
         self.service = build('sheets', 'v4', credentials=self.__creds)
 
-        self.active_spreadsheet = get_active_sheet()
-        self.switch_spreadsheet_id(self.active_spreadsheet)
+        self.spreadsheet_for_scrape = get_sheet_for_scrape()
+        self.switch_sheet_id(self.spreadsheet_for_scrape)
 
     def get_row_num(self, sheet_name):
         sheet_range = f"{sheet_name}!A1:A"
@@ -46,15 +52,15 @@ class GoogleSheet:
         return end_row
     
     def get_used_spreadsheet_name(self, category):
-        self.active_spreadsheet = get_active_sheet()
+        self.spreadsheet_for_scrape = get_sheet_for_scrape()
         sheet_name = category
-        if self.active_spreadsheet == 0:
+        if self.spreadsheet_for_scrape == 0:
             sheet_name = sheet_name + '_0'
         else:
             sheet_name = sheet_name + '_1'
         return sheet_name
             
-    def switch_spreadsheet_id(self, used_spreadsheet):
+    def switch_sheet_id(self, used_spreadsheet):
         if used_spreadsheet == 1:
             self.categories_id = {
                 "Laptop": 679621757,
@@ -69,12 +75,13 @@ class GoogleSheet:
                 "LinhKien": 732831781,
                 "PhuKien": 1913667635,
             }
-        # return categories_id
+        return self.categories_id
 
     def get_id_of_cate(self, category):
         return self.categories_id[category]
 
     def remove_duplicate(self, category):
+        end_row = self.get_row_num(self.get_used_spreadsheet_name(category))
         sheet_id = self.get_id_of_cate(category)
         batch_update_spreadsheet_request_body = {
             "requests": [
@@ -85,7 +92,7 @@ class GoogleSheet:
                             "startColumnIndex": 0,
                             "endColumnIndex": 4,
                             "startRowIndex": 0,
-                            "endRowIndex": 2000
+                            "endRowIndex": end_row
                         },
                         "comparisonColumns": [
                             {
@@ -126,7 +133,7 @@ class GoogleSheet:
 
     def sort_sheet_by_price(self, sheet_id, category):
         sheet_name = self.get_used_spreadsheet_name(category)
-        sheet_range = f"{sheet_name}!A2:A"
+        sheet_range = f"{sheet_name}!A1:A"
         result = self.service.spreadsheets().values().get(spreadsheetId=self.id, range=sheet_range).execute()
         end_row = len(result.get('values', []))
 
