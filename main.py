@@ -27,7 +27,7 @@ if __name__ == "__main__":
         classifier.save_model()
     searchEngine = SearchEngine(classifier= classifier, spreadsheet_id= spreadsheet_id, cred_file= cred_file,
                                 brand_file= "brand_names.txt")
-    result = searchEngine.search_product("balo laptop")
+    result = searchEngine.search_product("laptop lenovo")
     for x in result:
         print(x)
     
