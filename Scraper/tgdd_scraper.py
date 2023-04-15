@@ -74,8 +74,11 @@ def scrape_all(database, cate_ = 0):
 
                     product_list.append([name, price, web_url + link, img_link])
 
-                    # if 'Laptop MSI Gaming Pulse GL66 11UDK i7 11800H/16GB/512GB/4GB RTX3050Ti/144Hz/Balo/Chuột/Win10 (816VN)' in name:
-                    #     print(product)               
+                    if 'Laptop Lenovo Ideapad 3 15ITL6 i5 1135G7/8GB/512GB/Win11 (82H801P9VN)' in name:
+                        print(product)     
+                        print(web_url + link)
+                        print(name)
+                        print(price)          
                     # if 'HP Pavilion 15 eg2088TU' in name:
                     #     print(product)
                     # print(web_url + link)
@@ -86,7 +89,6 @@ def scrape_all(database, cate_ = 0):
             
             # ggs.store_in_db(product_list, cate['name'])
             database.update_with_data(product_list, cate['name'])
-            database.remove_duplicate(cate['name'])
             print('######################################' + ' THEGIOIDIDONG ' + ' ' + cate['name'] + ' FINISHED' + '-----' + str(len(product_list)))
 
         browser.quit() 

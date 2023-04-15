@@ -92,7 +92,6 @@ def get_products_in_category_cphones(database, category):
                 product_list.append(pro_info)
             database.update_with_data(product_list, category['name'])
             print('Scraped', link, '-', len(product_list), category['name'])
-        database.remove_duplicate(category['name'])
         print('######################################' + ' CELLPHONES ' + ' ' + category['name'] + ' FINISHED' + '-----' + str(len(product_list)))
         driver.quit()
         _thread.threads_status_dict[threading.current_thread()] = [0, get_products_in_category_cphones, category]

@@ -12,11 +12,11 @@ spreadsheet_id = '1H5TTOdrTC_T7U7k_ejCUG8BZWn97NuaxD0t4F7LwH8g'
 cred_file = 'client_secret.json'
 
 ggsheet = GoogleSheet(spreadsheet_id, cred_file)
-# ggsheet.clear_sheets(ggsheet.spreadsheet_for_scrape)
+ggsheet.clear_sheets(ggsheet.spreadsheet_for_scrape)
 
 is_success = thread_.run_threads(ggsheet)
-print('success: ' + str(is_success))
 for cate in ['Laptop', 'Desktop', 'PhuKien', 'LinhKien']:
+    ggsheet.remove_duplicate(cate)
     ggsheet.sort_sheet_by_price(ggsheet.categories_id[cate], cate)
 
 #Switch active status to the new crawled spreadsheet
@@ -34,6 +34,6 @@ else:
 # #SWITCH ACTIVE SPREADSHEET TO NEWLY CRAWLED SPREADSHEET HERE
 print("Execute time: --- %s seconds ---" % (time.time() - start_time))
 
-
+# ggsheet.remove_duplicate('Desktop')
 
 

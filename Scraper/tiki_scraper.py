@@ -76,7 +76,6 @@ def get_products_in_category_tiki(database, category):
                 # print('Scraped', pagelink, '-', len(category_dictionary), category['name'])
                 sleep(0.5)
         database.update_with_data(product_list, category['name'])
-        database.remove_duplicate(category['name'])
         print('######################################' + ' TIKI ' + ' ' + category['name'] + ' FINISHED' + '-----' + str(len(product_list)))
         driver.quit()
         _thread.threads_status_dict[threading.current_thread()] = [0, get_products_in_category_tiki, category]
