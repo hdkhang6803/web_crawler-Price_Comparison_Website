@@ -84,7 +84,7 @@ def get_products_in_category_cphones(database, category):
                 '.cancel-button-top', # remove_ad_selector
                 '.ins-web-opt-in-reminder-close-button') # close_reminder_selector
             html_text = driver.page_source
-            html_content = BeautifulSoup(html_text, 'html.parser')
+            html_content = BeautifulSoup(html_text, 'lxml')
             
             products = html_content.select(common_prod_selector.card)
             for product in products:

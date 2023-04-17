@@ -65,7 +65,7 @@ def get_products_in_category_tiki(database, category):
                 driver.get(pagelink)
                 # sleep(0.25)
                 html_text = driver.page_source
-                html_content = BeautifulSoup(html_text, 'html.parser')
+                html_content = BeautifulSoup(html_text, 'lxml')
                 
                 products = html_content.select(common_prod_selector.card)
                 if len(products) == 0: break

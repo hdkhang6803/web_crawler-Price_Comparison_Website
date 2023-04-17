@@ -127,7 +127,7 @@ def get_products_url(driver, url, max_page = 100):
         html = driver.page_source
 
         # Parse the HTML using BeautifulSoup
-        soup = BeautifulSoup(html, 'html.parser')
+        soup = BeautifulSoup(html, 'lxml')
 
         empty_divs = soup.find_all('div', {'class': 'css-447dxq'})
         if (len(empty_divs) != 0 or i > max_page):
@@ -157,7 +157,7 @@ def get_products_url(driver, url, max_page = 100):
             # html = driver.page_source
 
             # # Parse the HTML using BeautifulSoup
-            # soup = BeautifulSoup(html, 'html.parser')
+            # soup = BeautifulSoup(html, 'lxml')
 
             # product = site_to_product(soup, link)
             # if (product != None):
@@ -229,7 +229,7 @@ def get_products_search(productName):
         html = driver.page_source
 
         # Parse the HTML using BeautifulSoup
-        soup = BeautifulSoup(html, 'html.parser')
+        soup = BeautifulSoup(html, 'lxml')
 
         empty_divs = soup.find_all('div', {'class': 'css-447dxq'})
         if (len(empty_divs) != 0 or i > 3):
@@ -248,7 +248,7 @@ def get_products_search(productName):
             html = driver.page_source
 
             # Parse the HTML using BeautifulSoup
-            soup = BeautifulSoup(html, 'html.parser')
+            soup = BeautifulSoup(html, 'lxml')
 
             product = site_to_product(soup, link)
             products.append(product)
