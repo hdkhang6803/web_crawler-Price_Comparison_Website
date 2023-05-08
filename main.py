@@ -1,41 +1,39 @@
-import multi_thread as _thread
-import threading
-from GoogleSheet import GoogleSheet as ggs
-import Scraper.fpt_scraper as fpt
-import Scraper.tgdd_scraper as tgdd
+from DataStructures.GoogleSheet import GoogleSheet
+from DataStructures.GoogleSheet import GoogleSheet as ggs
+import time
+from DataStructures.ProductClassifier import ProductClassifier
+from DataStructures.SearchEngine import SearchEngine
 from datetime import datetime
+import multi_thread as thread_
+import time
+start_time = time.time()
 
 spreadsheet_id = '1H5TTOdrTC_T7U7k_ejCUG8BZWn97NuaxD0t4F7LwH8g'
 cred_file = 'client_secret.json'
 
-ggsheet = ggs(id=spreadsheet_id, cred_file=cred_file)
+ggsheet = GoogleSheet(spreadsheet_id, cred_file)
+ggsheet.clear_sheets(ggsheet.spreadsheet_for_scrape)
 
-file = open("active_spreadsheet.txt", "r+")
-active_spreadsheet = file.read()
-used_spreadsheet =  int(not(int(active_spreadsheet, base=2)))
+is_success = thread_.run_threads(ggsheet)
+for cate in ['Laptop', 'Desktop', 'PhuKien', 'LinhKien']:
+    ggsheet.remove_duplicate(cate)
+    ggsheet.sort_sheet_by_price(ggsheet.categories_id[cate], cate)
 
-ggsheet.clear_sheets(used_spreadsheet)
+#Switch active status to the new crawled spreadsheet
+# with open("active_spreadsheet.txt", "w") as file:
+#     print('open f')
+    # file.seek(0)
+    # file.truncate()
+    # file.write(str(ggsheet.spreadsheet_for_scrape))
 
-web_func_list_1 = [fpt.get_list_fpt]
-web_func_list_2 = [tgdd.get_list_tgdd]
-
-try:
-    _thread.run_multi_thread_web(web_func_list_1, ggsheet, used_spreadsheet)
-    _thread.run_multi_thread_web(web_func_list_2, ggsheet, used_spreadsheet)
-    for cate in ['Laptop', 'Desktop', 'PhuKien', 'LinhKien']:
-        ggsheet.sort_sheet_by_price(ggsheet.switch_spreadsheet_id(used_spreadsheet)[cate], cate, used_spreadsheet)
+if is_success == 1:
     print("Data fetching successfully")
-    file.seek(0)
-    file.truncate()
-    file.write(str(used_spreadsheet))
-    file.close()
-except:
-    print("Data fetching failed!")
-    file.close()
+else:
+    print("Data failed")
 
-#SWITCH ACTIVE SPREADSHEET TO NEWLY CRAWLED SPREADSHEET
+# #SWITCH ACTIVE SPREADSHEET TO NEWLY CRAWLED SPREADSHEET HERE
+print("Execute time: --- %s seconds ---" % (time.time() - start_time))
 
-
-
+# ggsheet.remove_duplicate('Desktop')
 
 
