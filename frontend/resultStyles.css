@@ -1,4 +1,11 @@
 /*! CSS Used from: Embedded */
+.webname {
+    margin: 5px 15px 5px 0px; 
+    font-family: Candara;
+    font-size:x 400px; 
+    font-weight: 1000; 
+    color: #eb1f3a
+}
 *,*::before,*::after{box-sizing:border-box;}
 body{margin:0;font-size:0.875rem;line-height:1.25rem;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);}
 h3{margin-top:0;margin-bottom:0.5rem;font-weight:500;line-height:1.3;}

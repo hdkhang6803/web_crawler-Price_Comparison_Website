@@ -1,3 +1,70 @@
+.webname {
+    margin: 5px 15px 5px 0px; 
+    font-family: Candara;
+    font-size:x 400px; 
+    font-weight: 1000; 
+    color: #eb1f3a
+}
+
+.container {
+    position: relative;
+    text-align: center;
+    color: white;
+}
+
+.heading {
+    position: absolute;
+    left: 56%;
+    font-family: Candara;
+    font-size: 50px;
+    font-weight: 700;
+    margin-right: 17%;
+}
+
+#heading1 {
+    top: 25%;
+    color: #ffffff;
+}
+
+#heading2 {
+    top: 35%;
+    color: #fd390d;
+}
+
+.grp {
+    margin-right: 15%;
+}
+
+#grp1 {
+    position: absolute;
+    top: 50%;
+    left: 53%;
+    width: 400px;
+}
+
+#grp2 {
+    position: absolute;
+    top: 60%;
+    left: 53%;
+    width: 400px;
+}
+
+.grpbtn {
+    background-color: #F7B030;
+    border: 3px solid #fd390d;
+    text-align: center;
+    padding: 5px 5px;
+    font-family: Candara;
+    color: #fd390d;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 5px;
+    /* border: none; */
+    width: 40%;
+    margin-left: 10px;
+}
+
+
 /*! CSS Used from: Embedded */
 *,*::before,*::after{box-sizing:border-box;}
 body{margin:0;font-size:0.875rem;line-height:1.25rem;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:rgba(0, 0, 0, 0);}
