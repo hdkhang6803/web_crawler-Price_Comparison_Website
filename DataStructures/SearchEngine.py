@@ -43,6 +43,7 @@ class SearchEngine:
 
     def search_product(self, user_input):
         category = self.classifier.predict(user_input)
+        print(category)
 
         data = self.ggsheet.get_data(1, 1000, 4, category)['values']
 

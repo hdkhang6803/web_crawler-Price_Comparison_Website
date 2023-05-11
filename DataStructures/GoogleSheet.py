@@ -113,7 +113,7 @@ class GoogleSheet:
 
     def update_with_data(self, data, category):
         value_range_body = {
-            "majorDimension": "DIMENSION_UNSPECIFIED",
+            "majorDimension": "ROWS",
             "values": data
         }
 
@@ -167,7 +167,7 @@ class GoogleSheet:
         response = request.execute()
         print(f"Sheet '{sheet_name}' sorted by price.")
 
-    def clear_sheets(self, category):
+    def clear_sheets(self):
         # Get sheet properties
         sheet_metadata = self.service.spreadsheets().get(spreadsheetId=self.id).execute()
         sheet_properties = sheet_metadata['sheets']

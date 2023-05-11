@@ -212,11 +212,11 @@ def get_list_cate_hacom(database, cate):
 def get_list_hacom(database):
     return(_thread.run_multi_thread_cate(database, categories, get_list_cate_hacom))
 # --------------------------- not updated --------------------------
-def get_products_search(productName):
+def get_products_search(driver, productName):
     url = domain + '/tim?q=' + productName + '&page='
 
     # Initialize the webdriver
-    driver = webdriver.Chrome(executable_path=driver_path)
+    # driver = webdriver.Chrome(executable_path=driver_path)
 
     # Load the website
     i = 0 
@@ -224,10 +224,11 @@ def get_products_search(productName):
     while True:
         i = i + 1
         cururl = url + str(i)
-        driver.get(cururl)
+        # driver.get(cururl)
 
         # Extract the HTML source code of the website
         html = driver.page_source
+        # html = requests.get(cururl).text
 
         # Parse the HTML using BeautifulSoup
         soup = BeautifulSoup(html, 'html.parser')
@@ -244,9 +245,9 @@ def get_products_search(productName):
             # link = product_div.find('a', {'class': 'css-pxdb0j', 'target': '_self'}).get('href')
             link = product_div.find('div', class_='p-info').find('h3', class_='p-name').find('a')['href']
 
-            driver.get(domain + link)
+            # driver.get(domain + link)
             # Extract the HTML source code of the website
-            html = driver.page_source
+            # html = driver.page_source
 
             # Parse the HTML using BeautifulSoup
             soup = BeautifulSoup(html, 'html.parser')
@@ -256,6 +257,6 @@ def get_products_search(productName):
 
     # Close the webdriver
     # print(len(prod))
-    driver.quit()
+    # driver.quit()
 
     return products

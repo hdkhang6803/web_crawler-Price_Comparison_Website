@@ -6,6 +6,8 @@ searchButton.onclick = function search() {
     user_input = document.getElementById("searchInput").value
     document.getElementById("searchInput").value = ""
 
+    if (user_input == "") 
+        return
     $.get('/getProducts?q=' + user_input)
     .then(function(data) {
         console.log(data)
