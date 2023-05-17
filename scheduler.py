@@ -15,17 +15,34 @@ user_sid = win32security.GetTokenInformation(
 )[0]
 user_sid_string = win32security.ConvertSidToStringSid(user_sid) # Convert the SID to string format
 
+# Get the working directory
+work_dir = os.getcwd()
+
+# Get the scrypt directory
+file_direc = work_dir + '\\main.py'
+
+# Parsing and modify the XML file
 ET.register_namespace('', 'http://schemas.microsoft.com/windows/2004/02/mit/task')
 mytree = ET.parse('CrawlerProc.xml')
 myroot = mytree.getroot()
 
+# Modify USER ID
 Author_tag = myroot.find(".//{http://schemas.microsoft.com/windows/2004/02/mit/task}Author")
 Author_tag.text = user_id
 
+# Modify USER SID
 SID_tag = myroot.find(".//{http://schemas.microsoft.com/windows/2004/02/mit/task}UserId")
 SID_tag.text = user_sid_string
 
-# Register the original namespace prefix
+#Modify working directory 
+WorkDir_tag = myroot.find(".//{http://schemas.microsoft.com/windows/2004/02/mit/task}WorkingDirectory")
+WorkDir_tag.text = work_dir
+
+#Modify scrypt directory 
+Command_tag = myroot.find(".//{http://schemas.microsoft.com/windows/2004/02/mit/task}Command")
+Command_tag.text = file_direc
+
+# Write back the modified XML
 mytree.write('CrawlerProc.xml')
 
 # Define the schtasks command arguments
@@ -36,8 +53,6 @@ command_crawler = [
 ]
 # Run the schtasks command
 subprocess.run(command_crawler, check=True)
-
-print('Task created successfully.')
 
 
 
