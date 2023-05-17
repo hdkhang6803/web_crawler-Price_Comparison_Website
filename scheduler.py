@@ -4,6 +4,7 @@ import xml.etree.ElementTree as ET
 import getpass
 import win32api
 import win32security
+from datetime import datetime
 
 # Get the current UserID
 user_id = getpass.getuser()
@@ -20,6 +21,11 @@ work_dir = os.getcwd()
 
 # Get the scrypt directory
 file_direc = work_dir + '\\main.py'
+
+# Let user type in scheduled time
+user_time = input("Enter time to start in 24 hour format (HH:MM:SS): ")
+current_date = datetime.now().date().strftime("%Y-%m-%d")
+timestamp = current_date + "T" + user_time
 
 # Parsing and modify the XML file
 ET.register_namespace('', 'http://schemas.microsoft.com/windows/2004/02/mit/task')
@@ -41,6 +47,10 @@ WorkDir_tag.text = work_dir
 #Modify scrypt directory 
 Command_tag = myroot.find(".//{http://schemas.microsoft.com/windows/2004/02/mit/task}Command")
 Command_tag.text = file_direc
+
+#Modify StartBoundary
+StartBound = myroot.find(".//{http://schemas.microsoft.com/windows/2004/02/mit/task}StartBoundary")
+StartBound.text = timestamp
 
 # Write back the modified XML
 mytree.write('CrawlerProc.xml')

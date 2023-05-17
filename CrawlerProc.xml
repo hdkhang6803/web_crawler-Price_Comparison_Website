@@ -1,12 +1,12 @@
 <Task xmlns="http://schemas.microsoft.com/windows/2004/02/mit/task" version="1.2">
   <RegistrationInfo>
     <Date>2023-05-17T16:00:03.2890602</Date>
-    <Author>LENOVO</Author>
+    <Author>ADMIN</Author>
     <URI>\Crawler\CrawlerProc</URI>
   </RegistrationInfo>
   <Triggers>
     <CalendarTrigger>
-      <StartBoundary>2023-05-17T20:53:00</StartBoundary>
+      <StartBoundary>2023-05-17T21:14:00</StartBoundary>
       <Enabled>true</Enabled>
       <ScheduleByDay>
         <DaysInterval>1</DaysInterval>
@@ -15,7 +15,7 @@
   </Triggers>
   <Principals>
     <Principal id="Author">
-      <UserId>S-1-5-21-2001159458-347363179-3138919295-1001</UserId>
+      <UserId>S-1-5-21-4201059688-3527442174-4219222397-1001</UserId>
       <LogonType>InteractiveToken</LogonType>
       <RunLevel>LeastPrivilege</RunLevel>
     </Principal>
@@ -43,8 +43,8 @@
   </Settings>
   <Actions Context="Author">
     <Exec>
-      <Command>D:\web_crawler-Price_Comparison_Website\main.py</Command>
-      <WorkingDirectory>D:\web_crawler-Price_Comparison_Website</WorkingDirectory>
+      <Command>D:\University\Year_2\HK2\MMT\Project_2\web_crawler-Price_Comparison_Website\main.py</Command>
+      <WorkingDirectory>D:\University\Year_2\HK2\MMT\Project_2\web_crawler-Price_Comparison_Website</WorkingDirectory>
     </Exec>
   </Actions>
 </Task>
