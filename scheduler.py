@@ -1,17 +1,38 @@
 import subprocess
 import os
+import xml.etree.ElementTree as ET
+import getpass
+import win32api
+import win32security
 
-file = os.getcwd() + '\main.py'
+# Get the current UserID
+user_id = getpass.getuser()
+
+# Get the current SID
+user_sid = win32security.GetTokenInformation(
+    win32security.OpenProcessToken(win32api.GetCurrentProcess(), win32security.TOKEN_READ),
+    win32security.TokenUser
+)[0]
+user_sid_string = win32security.ConvertSidToStringSid(user_sid) # Convert the SID to string format
+
+ET.register_namespace('', 'http://schemas.microsoft.com/windows/2004/02/mit/task')
+mytree = ET.parse('CrawlerProc.xml')
+myroot = mytree.getroot()
+
+Author_tag = myroot.find(".//{http://schemas.microsoft.com/windows/2004/02/mit/task}Author")
+Author_tag.text = user_id
+
+SID_tag = myroot.find(".//{http://schemas.microsoft.com/windows/2004/02/mit/task}UserId")
+SID_tag.text = user_sid_string
+
+# Register the original namespace prefix
+mytree.write('CrawlerProc.xml')
 
 # Define the schtasks command arguments
 command_crawler = [
     'schtasks', '/Create', 
     '/TN', 'Crawler\\CrawlerTask', 
     '/XML', os.getcwd() + '\\CrawlerProc.xml'
-    # '/TR', file,
-    # '/SC', 'DAILY', 
-    # '/ST', '15:48'
-    
 ]
 # Run the schtasks command
 subprocess.run(command_crawler, check=True)
