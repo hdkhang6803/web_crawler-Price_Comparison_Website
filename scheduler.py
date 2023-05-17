@@ -28,7 +28,7 @@ myroot = mytree.getroot()
 
 # Modify USER ID
 Author_tag = myroot.find(".//{http://schemas.microsoft.com/windows/2004/02/mit/task}Author")
-Author_tag.text = user_id
+Author_tag.text =  user_id 
 
 # Modify USER SID
 SID_tag = myroot.find(".//{http://schemas.microsoft.com/windows/2004/02/mit/task}UserId")
