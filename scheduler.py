@@ -19,7 +19,7 @@ user_sid_string = win32security.ConvertSidToStringSid(user_sid) # Convert the SI
 # Get the working directory
 work_dir = os.getcwd()
 
-# Get the scrypt directory
+# Get the script directory
 file_direc = work_dir + '\\main.py'
 
 # Let user type in scheduled time
@@ -44,7 +44,7 @@ SID_tag.text = user_sid_string
 WorkDir_tag = myroot.find(".//{http://schemas.microsoft.com/windows/2004/02/mit/task}WorkingDirectory")
 WorkDir_tag.text = work_dir
 
-#Modify scrypt directory 
+#Modify script directory 
 Command_tag = myroot.find(".//{http://schemas.microsoft.com/windows/2004/02/mit/task}Command")
 Command_tag.text = file_direc
 
@@ -55,14 +55,33 @@ StartBound.text = timestamp
 # Write back the modified XML
 mytree.write('CrawlerProc.xml')
 
-# Define the schtasks command arguments
-command_crawler = [
-    'schtasks', '/Create', 
-    '/TN', 'Crawler\\CrawlerTask', 
+
+# Define the schtasks command arguments to query the task
+query_command = [
+    'schtasks', '/Query',
+    '/TN', 'Crawler\\CrawlerTask'
+]
+# Run the schtasks command to query the task
+result = subprocess.run(query_command, capture_output=True)
+
+if result.returncode == 0:
+    # Task exists, delete it
+    delete_command = [
+        'schtasks', '/Delete',
+        '/TN', 'Crawler\\CrawlerTask',
+        '/F'  # Force delete without confirmation
+    ]
+    subprocess.run(delete_command, check=True)
+
+# Create task
+create_command = [
+    'schtasks', '/Create',
+    '/TN', 'Crawler\\CrawlerTask',
     '/XML', os.getcwd() + '\\CrawlerProc.xml'
 ]
-# Run the schtasks command
-subprocess.run(command_crawler, check=True)
+subprocess.run(create_command, check=True)
+
+
 
 
 

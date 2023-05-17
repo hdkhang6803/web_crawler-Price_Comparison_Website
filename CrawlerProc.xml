@@ -6,7 +6,7 @@
   </RegistrationInfo>
   <Triggers>
     <CalendarTrigger>
-      <StartBoundary>2023-05-17T21:14:00</StartBoundary>
+      <StartBoundary>2023-05-18T2:2:2</StartBoundary>
       <Enabled>true</Enabled>
       <ScheduleByDay>
         <DaysInterval>1</DaysInterval>
