@@ -3,6 +3,8 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <script src="search_func.js" defer=""></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     <link rel="preload" href="resultStyles.css" as="style">
     <link rel="stylesheet" href="resultStyles.css" data-n-g="">
     <link rel="preload" href="resultStyles.css" as="style">
@@ -37,12 +39,14 @@
                                         <div class="css-cssveg">
                                             <div class="css-17xgviv">
                                                 <div data-content-region-name="headerBar" data-track-content="true"
-                                                    data-content-name="searchBox" class="css-7wh3a0"><input
+                                                    data-content-name="searchBox" class="css-7wh3a0">
+                                                    <input id = "searchInput"
                                                         class="search-input css-7jjcju"
                                                         placeholder="Nhập từ khoá cần tìm" role="searchbox"
-                                                        aria-label="Search" value=""></div>
+                                                        aria-label="Search" value="{{user_input}}"></div>
                                                 <div data-content-region-name="headerBar" data-track-content="true"
-                                                    data-content-name="searchButton" class="css-7kp13n"><button
+                                                    data-content-name="searchButton" class="css-7kp13n">
+                                                    <button id = "searchButton" 
                                                         class="search-icon css-e5zlmr" aria-label="Search"><span
                                                             size="26" color="#FFFFFF"
                                                             class="css-squldw"></span></button>
@@ -136,28 +140,50 @@
                                         <div class="css-1psc7jy">
                                             <div type="subtitle" class="css-vwnntt">Khoảng giá</div>
                                             <div class="css-17pi3k">
-                                                <div class="css-12q959z" direction="row"><span
+                                                <style>
+                                                    .checkbox-inner {
+                                                        border: 1px solid #82869E;
+                                                        width: 16px;
+                                                        height: 16px;
+                                                        display: flex;
+                                                        align-items: center;
+                                                        justify-content: center;
+                                                    }
+                                                
+                                                    .checkbox-inner svg {
+                                                        display: none;
+                                                    }
+                                                
+                                                    .css-lc01j1:checked + .checkbox-inner svg {
+                                                        display: block;
+                                                    }
+                                                
+                                                    .css-lc01j1:checked + .checkbox-inner {
+                                                        background-color: #82869E;
+                                                    }
+                                                </style>
+                                                <div class="css-12q959z" direction="row"><span id="slider-value11"
                                                         class="css-hhrj34">0đ</span><span
-                                                        class="css-hhrj34">10.000.000đ</span></div>
+                                                        class="css-hhrj34" id="slider-value21">150.000.000đ</span></div>
                                                 <div class="css-1wtn57e">
                                                     <div color="primary" class="css-1sv7nws">
                                                         <div class="slider-track css-tipbfv">
                                                             <div class="slider-track-fill css-7rhk5r"
                                                                 style="width: 100%; left: 0%;"></div>
                                                         </div>
-                                                        <div class="slider-thumb css-1mc3642" role="slider"
-                                                            style="left: 0%;"><span class="tooltip css-1nfxeg5">0</span>
+                                                        <div id="slider1" class="slider-thumb css-1mc3642" role="slider"
+                                                            style="left: 0%;"><span id="slider-value12" class="tooltip css-1nfxeg5">0</span>
                                                         </div>
-                                                        <div class="slider-thumb css-1mc3642" role="slider"
-                                                            style="left: 100%;"><span
-                                                                class="tooltip css-1nfxeg5">10,000,000</span></div>
+                                                        <div id="slider2" class="slider-thumb css-1mc3642" role="slider"
+                                                            style="left: 100%;"><span id="slider-value22"
+                                                                class="tooltip css-1nfxeg5">150.000.000đ</span></div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="css-f1fyi0">
                                                 <div width="100%" color="border" class="css-yae08c"></div>
                                             </div>
-                                            <div class="css-0">
+                                            <div class="css-0" id = "div_brands">
                                                 <div class="css-gr7w3w">
                                                     <div type="subtitle" class="css-1nm0b4o">Thương hiệu</div><svg
                                                         fill="none" viewBox="0 0 24 24" class="active css-500jnn"
@@ -187,7 +213,7 @@
                                                                 <div type="body" class="css-j01363"
                                                                     style="flex: 1 1 0%;"><span><span
                                                                             style="display: flex;">
-                                                                            <div>LENOVO</div>
+                                                                            <div>Lenovo</div>
                                                                         </span><span class="css-r8p12y"
                                                                             data-popper-reference-hidden="false"
                                                                             data-popper-escaped="true"
@@ -197,7 +223,7 @@
                                                                                 data-placement="auto"
                                                                                 style="position: absolute; top: 0px; transform: translate3d(0px, 15px, 0px);"></span>
                                                                             <div type="body" color="white"
-                                                                                class="css-1bxob8i">LENOVO</div>
+                                                                                class="css-1bxob8i">Lenovo</div>
                                                                         </span></span></div>
                                                             </label></div>
                                                         <div style="min-width: 50%;"><label class="css-1tx6f1r">
@@ -217,7 +243,7 @@
                                                                 <div type="body" class="css-j01363"
                                                                     style="flex: 1 1 0%;"><span><span
                                                                             style="display: flex;">
-                                                                            <div>ACER</div>
+                                                                            <div>Acer</div>
                                                                         </span><span class="css-r8p12y"
                                                                             data-popper-reference-hidden="false"
                                                                             data-popper-escaped="true"
@@ -227,16 +253,198 @@
                                                                                 data-placement="auto"
                                                                                 style="position: absolute; top: 0px; transform: translate3d(0px, 15px, 0px);"></span>
                                                                             <div type="body" color="white"
-                                                                                class="css-1bxob8i">ACER</div>
+                                                                                class="css-1bxob8i">Acer</div>
                                                                         </span></span></div>
                                                             </label></div>
-                                                    </div><span class="css-cc88kj">Xem thêm</span>
+                                                            <div style="min-width: 50%;"><label class="css-1tx6f1r">
+                                                                <div class="css-l24w9c"><input type="checkbox"
+                                                                        class="css-lc01j1">
+                                                                    <div class="checkbox-inner css-gfk8lf"><svg
+                                                                            fill="none" viewBox="0 0 24 24" size="12"
+                                                                            class="css-u5ggi9" color="transparent"
+                                                                            height="12" width="12"
+                                                                            xmlns="http://www.w3.org/2000/svg">
+                                                                            <path d="M5 12.4545L9.375 17L19 7"
+                                                                                stroke="#82869E" stroke-width="1.5"
+                                                                                stroke-linecap="round"
+                                                                                stroke-linejoin="round"></path>
+                                                                        </svg></div>
+                                                                </div>
+                                                                <div type="body" class="css-j01363"
+                                                                    style="flex: 1 1 0%;"><span><span
+                                                                            style="display: flex;">
+                                                                            <div>Apple</div>
+                                                                        </span><span class="css-r8p12y"
+                                                                            data-popper-reference-hidden="false"
+                                                                            data-popper-escaped="true"
+                                                                            data-popper-placement="right"
+                                                                            style="position: absolute; inset: 0px auto auto 0px; visibility: hidden; z-index: 999; transform: translate3d(162px, 326px, 0px);"><span
+                                                                                class="arrow-left css-3mq3j4"
+                                                                                data-placement="auto"
+                                                                                style="position: absolute; top: 0px; transform: translate3d(0px, 15px, 0px);"></span>
+                                                                            <div type="body" color="white"
+                                                                                class="css-1bxob8i">Apple</div>
+                                                                        </span></span></div>
+                                                            </label></div>
+                                                            <div style="min-width: 50%;"><label class="css-1tx6f1r">
+                                                                <div class="css-l24w9c"><input type="checkbox"
+                                                                        class="css-lc01j1">
+                                                                    <div class="checkbox-inner css-gfk8lf"><svg
+                                                                            fill="none" viewBox="0 0 24 24" size="12"
+                                                                            class="css-u5ggi9" color="transparent"
+                                                                            height="12" width="12"
+                                                                            xmlns="http://www.w3.org/2000/svg">
+                                                                            <path d="M5 12.4545L9.375 17L19 7"
+                                                                                stroke="#82869E" stroke-width="1.5"
+                                                                                stroke-linecap="round"
+                                                                                stroke-linejoin="round"></path>
+                                                                        </svg></div>
+                                                                </div>
+                                                                <div type="body" class="css-j01363"
+                                                                    style="flex: 1 1 0%;"><span><span
+                                                                            style="display: flex;">
+                                                                            <div>MSI</div>
+                                                                        </span><span class="css-r8p12y"
+                                                                            data-popper-reference-hidden="false"
+                                                                            data-popper-escaped="true"
+                                                                            data-popper-placement="right"
+                                                                            style="position: absolute; inset: 0px auto auto 0px; visibility: hidden; z-index: 999; transform: translate3d(162px, 326px, 0px);"><span
+                                                                                class="arrow-left css-3mq3j4"
+                                                                                data-placement="auto"
+                                                                                style="position: absolute; top: 0px; transform: translate3d(0px, 15px, 0px);"></span>
+                                                                            <div type="body" color="white"
+                                                                                class="css-1bxob8i">MSI</div>
+                                                                        </span></span></div>
+                                                            </label></div>
+                                                            <div style="min-width: 50%;"><label class="css-1tx6f1r">
+                                                                <div class="css-l24w9c"><input type="checkbox"
+                                                                        class="css-lc01j1">
+                                                                    <div class="checkbox-inner css-gfk8lf"><svg
+                                                                            fill="none" viewBox="0 0 24 24" size="12"
+                                                                            class="css-u5ggi9" color="transparent"
+                                                                            height="12" width="12"
+                                                                            xmlns="http://www.w3.org/2000/svg">
+                                                                            <path d="M5 12.4545L9.375 17L19 7"
+                                                                                stroke="#82869E" stroke-width="1.5"
+                                                                                stroke-linecap="round"
+                                                                                stroke-linejoin="round"></path>
+                                                                        </svg></div>
+                                                                </div>
+                                                                <div type="body" class="css-j01363"
+                                                                    style="flex: 1 1 0%;"><span><span
+                                                                            style="display: flex;">
+                                                                            <div>HP</div>
+                                                                        </span><span class="css-r8p12y"
+                                                                            data-popper-reference-hidden="false"
+                                                                            data-popper-escaped="true"
+                                                                            data-popper-placement="right"
+                                                                            style="position: absolute; inset: 0px auto auto 0px; visibility: hidden; z-index: 999; transform: translate3d(162px, 326px, 0px);"><span
+                                                                                class="arrow-left css-3mq3j4"
+                                                                                data-placement="auto"
+                                                                                style="position: absolute; top: 0px; transform: translate3d(0px, 15px, 0px);"></span>
+                                                                            <div type="body" color="white"
+                                                                                class="css-1bxob8i">HP</div>
+                                                                        </span></span></div>
+                                                            </label></div>
+                                                            <div style="min-width: 50%;"><label class="css-1tx6f1r">
+                                                                <div class="css-l24w9c"><input type="checkbox"
+                                                                        class="css-lc01j1">
+                                                                    <div class="checkbox-inner css-gfk8lf"><svg
+                                                                            fill="none" viewBox="0 0 24 24" size="12"
+                                                                            class="css-u5ggi9" color="transparent"
+                                                                            height="12" width="12"
+                                                                            xmlns="http://www.w3.org/2000/svg">
+                                                                            <path d="M5 12.4545L9.375 17L19 7"
+                                                                                stroke="#82869E" stroke-width="1.5"
+                                                                                stroke-linecap="round"
+                                                                                stroke-linejoin="round"></path>
+                                                                        </svg></div>
+                                                                </div>
+                                                                <div type="body" class="css-j01363"
+                                                                    style="flex: 1 1 0%;"><span><span
+                                                                            style="display: flex;">
+                                                                            <div>Dell</div>
+                                                                        </span><span class="css-r8p12y"
+                                                                            data-popper-reference-hidden="false"
+                                                                            data-popper-escaped="true"
+                                                                            data-popper-placement="right"
+                                                                            style="position: absolute; inset: 0px auto auto 0px; visibility: hidden; z-index: 999; transform: translate3d(162px, 326px, 0px);"><span
+                                                                                class="arrow-left css-3mq3j4"
+                                                                                data-placement="auto"
+                                                                                style="position: absolute; top: 0px; transform: translate3d(0px, 15px, 0px);"></span>
+                                                                            <div type="body" color="white"
+                                                                                class="css-1bxob8i">Dell</div>
+                                                                        </span></span></div>
+                                                            </label></div>
+                                                            <div style="min-width: 50%;"><label class="css-1tx6f1r">
+                                                                <div class="css-l24w9c"><input type="checkbox"
+                                                                        class="css-lc01j1">
+                                                                    <div class="checkbox-inner css-gfk8lf"><svg
+                                                                            fill="none" viewBox="0 0 24 24" size="12"
+                                                                            class="css-u5ggi9" color="transparent"
+                                                                            height="12" width="12"
+                                                                            xmlns="http://www.w3.org/2000/svg">
+                                                                            <path d="M5 12.4545L9.375 17L19 7"
+                                                                                stroke="#82869E" stroke-width="1.5"
+                                                                                stroke-linecap="round"
+                                                                                stroke-linejoin="round"></path>
+                                                                        </svg></div>
+                                                                </div>
+                                                                <div type="body" class="css-j01363"
+                                                                    style="flex: 1 1 0%;"><span><span
+                                                                            style="display: flex;">
+                                                                            <div>Gigabyte</div>
+                                                                        </span><span class="css-r8p12y"
+                                                                            data-popper-reference-hidden="false"
+                                                                            data-popper-escaped="true"
+                                                                            data-popper-placement="right"
+                                                                            style="position: absolute; inset: 0px auto auto 0px; visibility: hidden; z-index: 999; transform: translate3d(162px, 326px, 0px);"><span
+                                                                                class="arrow-left css-3mq3j4"
+                                                                                data-placement="auto"
+                                                                                style="position: absolute; top: 0px; transform: translate3d(0px, 15px, 0px);"></span>
+                                                                            <div type="body" color="white"
+                                                                                class="css-1bxob8i">Gigabyte</div>
+                                                                        </span></span></div>
+                                                            </label></div>
+                                                            <div style="min-width: 50%;"><label class="css-1tx6f1r">
+                                                                <div class="css-l24w9c"><input type="checkbox"
+                                                                        class="css-lc01j1">
+                                                                    <div class="checkbox-inner css-gfk8lf"><svg
+                                                                            fill="none" viewBox="0 0 24 24" size="12"
+                                                                            class="css-u5ggi9" color="transparent"
+                                                                            height="12" width="12"
+                                                                            xmlns="http://www.w3.org/2000/svg">
+                                                                            <path d="M5 12.4545L9.375 17L19 7"
+                                                                                stroke="#82869E" stroke-width="1.5"
+                                                                                stroke-linecap="round"
+                                                                                stroke-linejoin="round"></path>
+                                                                        </svg></div>
+                                                                </div>
+                                                                <div type="body" class="css-j01363"
+                                                                    style="flex: 1 1 0%;"><span><span
+                                                                            style="display: flex;">
+                                                                            <div>Microsoft</div>
+                                                                        </span><span class="css-r8p12y"
+                                                                            data-popper-reference-hidden="false"
+                                                                            data-popper-escaped="true"
+                                                                            data-popper-placement="right"
+                                                                            style="position: absolute; inset: 0px auto auto 0px; visibility: hidden; z-index: 999; transform: translate3d(162px, 326px, 0px);"><span
+                                                                                class="arrow-left css-3mq3j4"
+                                                                                data-placement="auto"
+                                                                                style="position: absolute; top: 0px; transform: translate3d(0px, 15px, 0px);"></span>
+                                                                            <div type="body" color="white"
+                                                                                class="css-1bxob8i">Microsoft</div>
+                                                                        </span></span></div>
+                                                            </label></div>
+
+                                                    </div>
+                                                    <!-- <span class="css-cc88kj">Xem thêm</span> -->
                                                 </div>
                                             </div>
                                             <div class="css-f1fyi0">
                                                 <div width="100%" color="border" class="css-yae08c"></div>
                                             </div>
-                                            <div class="css-0">
+                                            <div class="css-0" id = "div_page_src">
                                                 <div class="css-gr7w3w">
                                                     <div type="subtitle" class="css-1nm0b4o">Nhà phân phối</div><svg
                                                         fill="none" viewBox="0 0 24 24" class="active css-500jnn"
@@ -429,7 +637,8 @@
                                                                                 class="css-1bxob8i">Tiki</div>
                                                                         </span></span></div>
                                                             </label></div>
-                                                    </div><span class="css-cc88kj">Xem thêm</span>
+                                                    </div>
+                                                    <!-- <span class="css-cc88kj">Xem thêm</span> -->
                                                 </div>
                                             </div>
 
@@ -438,377 +647,19 @@
                                     <div class="teko-col teko-col-10 css-gr7r8o"
                                         style="padding-left: 8px; padding-right: 8px;">
                                         <div class="css-e7jx9s">
-                                            <div class="css-1qj72qk">
-                                                <div id="js-sort-bar" class="css-1ay2tut"></div>
-                                                <div class="css-1f528qu">
-                                                    <div class="css-1otuq4n">Sắp xếp theo</div>
-                                                    <div data-content-region-name="sortFilterProduct"
-                                                        data-track-content="true"
-                                                        data-content-name="sort=discount&amp;order=DESC"
-                                                        data-content-target="searchProductResult"
-                                                        data-content-payload="{&quot;screenName&quot;:&quot;searchProductResult&quot;}"
-                                                        class="css-j9fva9">
-                                                        <div class="css-mau3c4"> </div><span class="css-f2ehsn">Khuyến
-                                                            mãi tốt nhất</span>
-                                                    </div>
-                                                    <div data-content-region-name="sortFilterProduct"
-                                                        data-track-content="true"
-                                                        data-content-name="sort=quantity.last_3_month&amp;order=DESC"
-                                                        data-content-target="searchProductResult"
-                                                        data-content-payload="{&quot;screenName&quot;:&quot;searchProductResult&quot;}"
-                                                        class="css-j9fva9">
-                                                        <div class="css-mau3c4"> </div><span class="css-f2ehsn">Bán
-                                                            chạy</span>
-                                                    </div>
-                                                    <div data-content-region-name="sortFilterProduct"
-                                                        data-track-content="true"
-                                                        data-content-name="sort=bestPrice&amp;order=DESC"
-                                                        data-content-target="searchProductResult"
-                                                        data-content-payload="{&quot;screenName&quot;:&quot;searchProductResult&quot;}"
-                                                        class="css-j9fva9">
-                                                        <div class="css-mau3c4"> </div><span class="css-f2ehsn">Giá giảm
-                                                            dần</span>
-                                                    </div>
-                                                    <div data-content-region-name="sortFilterProduct"
-                                                        data-track-content="true"
-                                                        data-content-name="sort=bestPrice&amp;order=ASC"
-                                                        data-content-target="searchProductResult"
-                                                        data-content-payload="{&quot;screenName&quot;:&quot;searchProductResult&quot;}"
-                                                        class="css-j9fva9">
-                                                        <div class="css-mau3c4"> </div><span class="css-f2ehsn">Giá tăng
-                                                            dần</span>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            
 
-                                            <div class="best-product"
-                                                style="height: 230px; background-color: rgb(232, 199, 53);">
-                                                <div data-content-region-name="imgProductDetail"
-                                                    data-track-content="true" data-content-name="viewImage"
-                                                    data-content-target="productImage"
-                                                    data-content-payload="{&quot;sku&quot;:&quot;1204233&quot;,&quot;screenName&quot;:&quot;productDetail&quot;,&quot;index&quot;:0}">
-                                                    <div class="productDetailPreview"
-                                                        style="cursor: pointer; position: relative; margin-bottom: 0.5rem;">
-                                                        <div width="15%" class="css-j4683g"><img
-                                                                src="https://lh3.googleusercontent.com/tvCS-mumagSQVG7QEzWLhtcqcqaXtKfnOC0zRf9Zt0QdbGDW0uBrYWHxr31zdL5RiVsaWmHZ1C6nzgAItQ=w500-rw"
-                                                                loading="lazy" hover="" decoding="async"
-                                                                alt="Chuột máy tínhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh Dell MS116 (Đen)"
-                                                                fetchpriority="low"
-                                                                style="width: 15%; height: 15%; object-fit: contain; position: relative; margin: 20px; height: fit-content; float: left; border-radius: 7px;">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="productInfo">
-                                                    <div>
-                                                        <h1 class="css-4kh4rf">Chuộgggggggggggggggggggggggggggggt máy tính Dell MS116 (Đen) Chuột máy tính Dell MS116 (Đen) Chuột máy tính Dell MS116 (Đen) Chuột máy tính Dell MS116 (Đen)</h1>
-                                                        <div>
-                                                            <div type="caption" color="textSecondary" class="css-wnp42j"
-                                                                style="font-size: 14px; margin-top: -4px;">Thương hiệu
-                                                                <a target="_self" class="css-cbrxda"
-                                                                    href="https://phongvu.vn/dell-brand.dell"><span
-                                                                        class="css-n67qkj">Dell</span></a><span
-                                                                    class="css-1qgvt7n"></span> SKU:
-                                                                1204233<span class="css-1qgvt7n"></span> Mã vạch:
-                                                                &nbsp;763610</div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="css-1q5zfcu">
-                                                        <div type="title"
-                                                            class="att-product-detail-latest-price css-z55zyl"
-                                                            color="primary500">
-                                                            110.000₫</div>
-                                                    </div>
-                                                    <div class="css-f1fyi0">
-                                                        <div width="100%" color="divider" class="css-1fm9yfq"></div>
-                                                    </div>
-                                                    <div class="css-f7zc9t">
-                                                        <div style="margin: 10px 5px;">
-                                                            Giá tốt nhất tại: Cellphones
-                                                        </div>
-                                                        <div data-content-region-name="descriptionDetail"
-                                                            data-track-content="true" data-content-name="buyNow"
-                                                            data-content-target="cart"
-                                                            data-content-payload="{&quot;sku&quot;:&quot;1204233&quot;,&quot;screenName&quot;:&quot;productDetail&quot;}"
-                                                            class="css-yp9swi"><button height="2.5rem" color="white"
-                                                                class="att-detail-page-buy-now-button css-9p27dv"
-                                                                type="button">
-                                                                <div type="subtitle" class="css-59wb59">MUA NGAY</div>
-                                                                <span style="margin-left: 0px;">
-                                                                    <div class="css-157jl91"></div>
-                                                                </span>
-                                                            </button></div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            <!-- <div class="best-product"> -->
+                                            {{product_divs[0] | safe}}
+                                            <!-- </div> -->
                                             <div class="good-products">
-                                                <div type="grid" class="css-13w7uog">
-                                                    <div class="product-card css-35xksx"
-                                                        data-content-region-name="itemProductResult"
-                                                        data-track-content="true" data-content-name="211101723"
-                                                        data-content-target="productDetail">
-                                                        <a target="_self" class="css-pxdb0j"
-                                                            href="https://phongvu.vn/chuot-khong-day-logitech-m220-den--s211101723">
-                                                            <div class="css-4rhdrh">
-                                                                <div class="css-1v97aik">
-                                                                    <div class="css-798fc">
-                                                                        <div height="100%" width="100%"
-                                                                            class="css-1uzm8bv"><img
-                                                                                src="https://lh3.googleusercontent.com/tvCS-mumagSQVG7QEzWLhtcqcqaXtKfnOC0zRf9Zt0QdbGDW0uBrYWHxr31zdL5RiVsaWmHZ1C6nzgAItQ=w500-rw"
-                                                                                loading="lazy" hover="zoom"
-                                                                                decoding="async"
-                                                                                alt="Chuột không dây Logitech Silent M220 (Đen)"
-                                                                                style="width: 100%; height: 100%; object-fit: contain;">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="css-14q2k9d">
-                                                                        <div class="css-zb7zul">
-                                                                            <div class="css-1bqeu8f">TIẾT KIỆM</div>
-                                                                            <div class="css-1rdv2qd">71.000&nbsp;₫</div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="css-68cx5s">
-                                                                    <div type="body" color="textSecondary"
-                                                                        class="css-rwi43z"
-                                                                        style="text-transform: uppercase; display: inline;">
-                                                                        Cellphones</div>
-                                                                </div>
-                                                                <div class="css-1ybkowq">
-                                                                    <div type="caption"
-                                                                        class="att-product-card-title css-1s5rt73"
-                                                                        color="textPrimary">
-                                                                        <h3 title="Chuột không dây Logitech Silent M220 (Đen)"
-                                                                            class="css-1xdyrhj">Chuột không dây Logitech Silent M220 (Đen)</h3>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="css-kgkvir">
-                                                                    <div class="css-1co26wt">
-                                                                        <div type="subtitle"
-                                                                            class="att-product-detail-latest-price css-tzkko0"
-                                                                            color="primary500">229.000&nbsp;₫</div>
-                                                                        <div class="css-3mjppt">
-                                                                            <div type="caption"
-                                                                                class="att-product-detail-retail-price css-164smgo"
-                                                                                color="textSecondary">300.000&nbsp;₫
-                                                                            </div>
-                                                                            <div type="caption" color="primary500"
-                                                                                class="css-1f8jk2s">-23.67%</div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div type="grid" class="css-13w7uog">
-                                                    <div class="product-card css-35xksx"
-                                                        data-content-region-name="itemProductResult"
-                                                        data-track-content="true" data-content-name="211103374"
-                                                        data-content-target="productDetail">
-                                                        <a target="_self" class="css-pxdb0j"
-                                                            href="https://phongvu.vn/chuot-khong-day-logitech-m330-den--s211103374">
-                                                            <div class="css-4rhdrh">
-                                                                <div class="css-1v97aik">
-                                                                    <div class="css-798fc">
-                                                                        <div height="100%" width="100%"
-                                                                            class="css-1uzm8bv"><img
-                                                                                src="https://lh3.googleusercontent.com/tvCS-mumagSQVG7QEzWLhtcqcqaXtKfnOC0zRf9Zt0QdbGDW0uBrYWHxr31zdL5RiVsaWmHZ1C6nzgAItQ=w500-rw"
-                                                                                loading="lazy" hover="zoom"
-                                                                                decoding="async"
-                                                                                alt="Chuột không dây Logitech M330 (Đen)"
-                                                                                style="width: 100%; height: 100%; object-fit: contain;">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="css-68cx5s">
-                                                                    <div type="body" color="textSecondary"
-                                                                        class="css-rwi43z"
-                                                                        style="text-transform: uppercase; display: inline;">
-                                                                        Phong Vũ</div>
-                                                                </div>
-                                                                <div class="css-1ybkowq">
-                                                                    <div type="caption"
-                                                                        class="att-product-card-title css-1s5rt73"
-                                                                        color="textPrimary">
-                                                                        <h3 title="Chuột không dây Logitech M330 (Đen)"
-                                                                            class="css-1xdyrhj">Chuột không dây Logitech M330 (Đen)</h3>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="css-kgkvir">
-                                                                    <div class="css-1co26wt">
-                                                                        <div type="subtitle"
-                                                                            class="att-product-detail-latest-price css-tzkko0"
-                                                                            color="primary500">370.000&nbsp;₫</div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div type="grid" class="css-13w7uog">
-                                                    <div class="product-card css-35xksx"
-                                                        data-content-region-name="itemProductResult"
-                                                        data-track-content="true" data-content-name="211200329"
-                                                        data-content-target="productDetail">
-                                                        <a target="_self" class="css-pxdb0j"
-                                                            href="https://phongvu.vn/chuot-khong-day-logitech-m186-den--s211200329">
-                                                            <div class="css-4rhdrh">
-                                                                <div class="css-1v97aik">
-                                                                    <div class="css-798fc">
-                                                                        <div height="100%" width="100%"
-                                                                            class="css-1uzm8bv"><img
-                                                                                src="https://lh3.googleusercontent.com/tvCS-mumagSQVG7QEzWLhtcqcqaXtKfnOC0zRf9Zt0QdbGDW0uBrYWHxr31zdL5RiVsaWmHZ1C6nzgAItQ=w500-rw"
-                                                                                loading="lazy" hover="zoom"
-                                                                                decoding="async"
-                                                                                alt="Chuột không dây Logitech M186 (Xám)"
-                                                                                style="width: 100%; height: 100%; object-fit: contain;">
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="css-68cx5s">
-                                                                    <div type="body" color="textSecondary"
-                                                                        class="css-rwi43z"
-                                                                        style="text-transform: uppercase; display: inline;">
-                                                                        Thế giới di động</div>
-                                                                </div>
-                                                                <div class="css-1ybkowq">
-                                                                    <div type="caption"
-                                                                        class="att-product-card-title css-1s5rt73"
-                                                                        color="textPrimary">
-                                                                        <h3 title="Chuột không dây Logitech M186 (Xám)"
-                                                                            class="css-1xdyrhj">Chuột không dây Logitech M186 (Xám)</h3>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="css-kgkvir">
-                                                                    <div class="css-1co26wt">
-                                                                        <div type="subtitle"
-                                                                            class="att-product-detail-latest-price css-tzkko0"
-                                                                            color="primary500">239.000&nbsp;₫</div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div type="grid" class="css-13w7uog">
-                                                    <div class="product-card css-35xksx"
-                                                        data-content-region-name="itemProductResult"
-                                                        data-track-content="true" data-content-name="220103009"
-                                                        data-content-target="productDetail">
-                                                        <a target="_self" class="css-pxdb0j"
-                                                            href="https://phongvu.vn/chuot-khong-day-logitech-pop-vang--s220103009">
-                                                            <div class="css-4rhdrh">
-                                                                <div class="css-1v97aik">
-                                                                    <div class="css-798fc">
-                                                                        <div height="100%" width="100%"
-                                                                            class="css-1uzm8bv"><img
-                                                                                src="https://lh3.googleusercontent.com/tvCS-mumagSQVG7QEzWLhtcqcqaXtKfnOC0zRf9Zt0QdbGDW0uBrYWHxr31zdL5RiVsaWmHZ1C6nzgAItQ=w500-rw"
-                                                                                loading="lazy" hover="zoom"
-                                                                                decoding="async"
-                                                                                alt="Chuột không dây Logitech POP (Vàng)"
-                                                                                style="width: 100%; height: 100%; object-fit: contain;">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="css-14q2k9d">
-                                                                        <div class="css-zb7zul">
-                                                                            <div class="css-1bqeu8f">TIẾT KIỆM</div>
-                                                                            <div class="css-1rdv2qd">310.000&nbsp;₫
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="css-68cx5s">
-                                                                    <div type="body" color="textSecondary"
-                                                                        class="css-rwi43z"
-                                                                        style="text-transform: uppercase; display: inline;">
-                                                                        Tiki</div>
-                                                                </div>
-                                                                <div class="css-1ybkowq">
-                                                                    <div type="caption"
-                                                                        class="att-product-card-title css-1s5rt73"
-                                                                        color="textPrimary">
-                                                                        <h3 title="Chuột không dây Logitech POP (Vàng)"
-                                                                            class="css-1xdyrhj">Chuột không dây Logitech POP (Vàng)</h3>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="css-kgkvir">
-                                                                    <div class="css-1co26wt">
-                                                                        <div type="subtitle"
-                                                                            class="att-product-detail-latest-price css-tzkko0"
-                                                                            color="primary500">589.000&nbsp;₫</div>
-                                                                        <div class="css-3mjppt">
-                                                                            <div type="caption"
-                                                                                class="att-product-detail-retail-price css-164smgo"
-                                                                                color="textSecondary">899.000&nbsp;₫
-                                                                            </div>
-                                                                            <div type="caption" color="primary500"
-                                                                                class="css-1f8jk2s">-34.48%</div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                </div>
-                                                <div type="grid" class="css-13w7uog">
-                                                    <div class="product-card css-35xksx"
-                                                        data-content-region-name="itemProductResult"
-                                                        data-track-content="true" data-content-name="220200135"
-                                                        data-content-target="productDetail">
-                                                        <a target="_self" class="css-pxdb0j"
-                                                            href="https://phongvu.vn/chuot-gaming-msi-clutch-gm08-den--s220200135">
-                                                            <div class="css-4rhdrh">
-                                                                <div class="css-1v97aik">
-                                                                    <div class="css-798fc">
-                                                                        <div height="100%" width="100%"
-                                                                            class="css-1uzm8bv"><img
-                                                                                src="https://lh3.googleusercontent.com/tvCS-mumagSQVG7QEzWLhtcqcqaXtKfnOC0zRf9Zt0QdbGDW0uBrYWHxr31zdL5RiVsaWmHZ1C6nzgAItQ=w500-rw"
-                                                                                loading="lazy" hover="zoom"
-                                                                                decoding="async"
-                                                                                alt="Chuột gaming MSI Clutch GM08 (Đen)"
-                                                                                style="width: 100%; height: 100%; object-fit: contain;">
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="css-14q2k9d">
-                                                                        <div class="css-zb7zul">
-                                                                            <div class="css-1bqeu8f">TIẾT KIỆM</div>
-                                                                            <div class="css-1rdv2qd">70.000&nbsp;₫</div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="css-68cx5s">
-                                                                    <div type="body" color="textSecondary"
-                                                                        class="css-rwi43z"
-                                                                        style="text-transform: uppercase; display: inline;">
-                                                                        Fptshop</div>
-                                                                </div>
-                                                                <div class="css-1ybkowq">
-                                                                    <div type="caption"
-                                                                        class="att-product-card-title css-1s5rt73"
-                                                                        color="textPrimary">
-                                                                        <h3 title="Chuột gaming MSI Clutch GM08 (Đen)"
-                                                                            class="css-1xdyrhj">Chuột gaming MSI Clutch GM08 (Đen)</h3>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="css-kgkvir">
-                                                                    <div class="css-1co26wt">
-                                                                        <div type="subtitle"
-                                                                            class="att-product-detail-latest-price css-tzkko0"
-                                                                            color="primary500">379.000&nbsp;₫</div>
-                                                                        <div class="css-3mjppt">
-                                                                            <div type="caption"
-                                                                                class="att-product-detail-retail-price css-164smgo"
-                                                                                color="textSecondary">449.000&nbsp;₫
-                                                                            </div>
-                                                                            <div type="caption" color="primary500"
-                                                                                class="css-1f8jk2s">-15.59%</div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </a>
-                                                    </div>
-                                                </div>
+                                                {% for product_div in product_divs[1:] %}
+                                                    <!-- <div class="product-item"> -->
+                                                        <!-- Display each template for the good products -->
+                                                        {{ product_div | safe}}
+                                                    <!-- </div> -->
+                                                {% endfor %}
+                                                
                                             </div>
                                         </div>
 

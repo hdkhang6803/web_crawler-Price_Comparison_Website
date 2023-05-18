@@ -13,6 +13,7 @@ class SearchEngine:
             self.calc_point_func = calc_point_func
         self.classifier = classifier
         self.ggsheet = GoogleSheet(spreadsheet_id, cred_file)
+        self.set_default_filter()
         pass
 
     def get_brand_names(self, brand_file):
@@ -41,22 +42,60 @@ class SearchEngine:
 
         return matched / total
 
+    # set default filter condition
+    def set_default_filter(self):
+        self.price_min = 0
+        self.price_max = 100000000
+        self.filterBrands = []
+        self.filterShops = []
+
+    def set_filter_price(self, price_range):
+        if (price_range == []):
+            return
+        self.price_min = int(price_range[0])
+        self.price_max = int(price_range[1])
+
+    def set_filter_brands(self, brands):
+        self.filterBrands = brands
+    
+    def set_filter_shops(self, shops):
+        self.filterShops = shops
+
+    # check if the product satisfy the filter condition
+    def satisfiy(self, row):
+        if (int(row[1]) < self.price_min or int(row[1]) > self.price_max):
+            return False
+        if (self.filterBrands != []):
+            print("ayo?")
+            for brand in self.filterBrands:
+                if (brand in row[0]):
+                    return True
+            return False
+        if (self.filterShops != []):
+            print("ayo?")
+            for shop in self.filterShops:
+                if (shop in row[2]):
+                    return True
+            return False
+        return True
+
     def search_product(self, user_input):
         category = self.classifier.predict(user_input)
         print(category)
 
         data = self.ggsheet.get_data(1, 1000, 4, category)['values']
 
-        chosen_products = CappedPriorityQueue(self.value_of_queue_item, 6)
+        chosen_products = CappedPriorityQueue(self.value_of_queue_item, 21)
         for row in data:
             if (chosen_products.good(0.8)):
                 break
-            else:
+            elif (self.calc_point_func(user_input, row[0]) > 0.5 and self.satisfiy(row)):
                 point_obj = [self.calc_point_func(user_input, row[0]), row]
                 chosen_products.push(point_obj)
             
             # print(" ----------------------- ")
             # chosen_products.print()
+        
 
         return chosen_products.arr
 

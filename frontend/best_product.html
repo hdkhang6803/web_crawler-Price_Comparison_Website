@@ -1,46 +1,64 @@
-<div data-content-region-name="imgProductDetail"
-    data-track-content="true" data-content-name="viewImage"
-    data-content-target="productImage"
-    data-content-payload="{&quot;sku&quot;:&quot;1204233&quot;,&quot;screenName&quot;:&quot;productDetail&quot;,&quot;index&quot;:0}">
-    <div class="productDetailPreview"
-        style="cursor: pointer; position: relative; margin-bottom: 0.5rem;">
-        <div width="15%" class="css-j4683g"><img
-                src= "{{img_link}}"
-                loading="lazy" hover="" decoding="async"
-                alt="{{title}}"
-                fetchpriority="low"
-                style="width: 15%; height: 15%; object-fit: contain; position: relative; margin: 20px; height: fit-content; float: left; border-radius: 7px;">
+
+<div class="best-product"
+    style="height: 230px; background-color: rgb(232, 199, 53);">
+    <div data-content-region-name="imgProductDetail"
+        data-track-content="true" data-content-name="viewImage"
+        data-content-target="productImage"
+        data-content-payload="{&quot;sku&quot;:&quot;1204233&quot;,&quot;screenName&quot;:&quot;productDetail&quot;,&quot;index&quot;:0}">
+        <div class="productDetailPreview"
+            style="cursor: pointer; position: relative; margin-bottom: 0.5rem;">
+            <div width="15%" class="css-j4683g"><img
+                    src= {{img_link}}
+                    loading="lazy" hover="" decoding="async"
+                    alt={{title}}
+                    fetchpriority="low"
+                    style="width: 15%; height: 15%; object-fit: contain; position: relative; margin: 20px; height: fit-content; float: left; border-radius: 7px;">
+            </div>
         </div>
     </div>
-</div>
-<div style="float: left; margin: 10px;">
-    <div>
-        <h1 class="css-4kh4rf"> {{title}} </h1>
-    </div>
-    <div class="css-1q5zfcu">
-        <div type="title"
-            class="att-product-detail-latest-price css-z55zyl"
-            color="primary500">
-            {{price}}₫</div>
-    </div>
-    <div class="css-f1fyi0">
-        <div width="100%" color="divider" class="css-1fm9yfq"></div>
-    </div>
-    <div class="css-f7zc9t">
-        <div style="margin: 10px 5px;">
-            Giá tốt nhất tại: {{page_name}} 
+    <div class="productInfo">
+        <div>
+            <h1 class="css-4kh4rf"> {{title}} </h1>
+            <!-- <div>
+                <div type="caption" color="textSecondary" class="css-wnp42j"
+                    style="font-size: 14px; margin-top: -4px;">Thương hiệu
+                    <a target="_self" class="css-cbrxda"
+                        href="https://phongvu.vn/dell-brand.dell"><span
+                            class="css-n67qkj">Dell</span></a><span
+                        class="css-1qgvt7n"></span> SKU:
+                    1204233<span class="css-1qgvt7n"></span> Mã vạch:
+                    &nbsp;763610</div>
+            </div> -->
         </div>
-        <div data-content-region-name="descriptionDetail"
-            data-track-content="true" data-content-name="buyNow"
-            data-content-target="cart"
-            data-content-payload="{&quot;sku&quot;:&quot;1204233&quot;,&quot;screenName&quot;:&quot;productDetail&quot;}"
-            class="css-yp9swi"><button height="2.5rem" color="white"
-                class="att-detail-page-buy-now-button css-9p27dv"
-                type="button">
-                <div type="subtitle" class="css-59wb59">MUA NGAY</div>
-                <span style="margin-left: 0px;">
-                    <div class="css-157jl91"></div>
-                </span>
-            </button></div>
+        <div class="css-1q5zfcu">
+            <div type="title"
+                class="att-product-detail-latest-price css-z55zyl"
+                color="primary500">
+                {{price}}₫</div>
+        </div>
+        <div class="css-f1fyi0">
+            <div width="100%" color="divider" class="css-1fm9yfq"></div>
+        </div>
+        <div class="css-f7zc9t">
+            <div style="margin: 10px 5px;">
+                Giá tốt nhất tại: {{page_name}} 
+            </div>
+            <div data-content-region-name="descriptionDetail"
+                data-track-content="true" data-content-name="buyNow"
+                data-content-target="cart"
+                data-content-payload="{&quot;sku&quot;:&quot;1204233&quot;,&quot;screenName&quot;:&quot;productDetail&quot;}"
+                class="css-yp9swi">
+                <a href = {{product_link}}>
+                <button height="2.5rem" color="white"
+                    class="att-detail-page-buy-now-button css-9p27dv"
+                    type="button">
+                    <div type="subtitle" class="css-59wb59">MUA NGAY</div>
+                    <span style="margin-left: 0px;">
+                        <div class="css-157jl91"></div>
+                    </span>
+                </button>
+                </a>
+            </div>
+        </div>
     </div>
 </div>
