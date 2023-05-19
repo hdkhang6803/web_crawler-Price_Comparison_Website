@@ -84,7 +84,7 @@ def get_products_in_category_cphones(database, category):
                 '.cancel-button-top', # remove_ad_selector
                 '.ins-web-opt-in-reminder-close-button') # close_reminder_selector
             html_text = driver.page_source
-            html_content = BeautifulSoup(html_text, 'html.parser')
+            html_content = BeautifulSoup(html_text, 'lxml')
             
             products = html_content.select(common_prod_selector.card)
             for product in products:
@@ -92,7 +92,6 @@ def get_products_in_category_cphones(database, category):
                 product_list.append(pro_info)
             database.update_with_data(product_list, category['name'])
             print('Scraped', link, '-', len(product_list), category['name'])
-        database.remove_duplicate(category['name'])
         print('######################################' + ' CELLPHONES ' + ' ' + category['name'] + ' FINISHED' + '-----' + str(len(product_list)))
         driver.quit()
         _thread.threads_status_dict[threading.current_thread()] = [0, get_products_in_category_cphones, category]

@@ -127,7 +127,7 @@ def get_products_url(driver, url, max_page = 100):
         html = driver.page_source
 
         # Parse the HTML using BeautifulSoup
-        soup = BeautifulSoup(html, 'html.parser')
+        soup = BeautifulSoup(html, 'lxml')
 
         empty_divs = soup.find_all('div', {'class': 'css-447dxq'})
         if (len(empty_divs) != 0 or i > max_page):
@@ -157,7 +157,7 @@ def get_products_url(driver, url, max_page = 100):
             # html = driver.page_source
 
             # # Parse the HTML using BeautifulSoup
-            # soup = BeautifulSoup(html, 'html.parser')
+            # soup = BeautifulSoup(html, 'lxml')
 
             # product = site_to_product(soup, link)
             # if (product != None):
@@ -199,7 +199,6 @@ def get_list_cate_hacom(database, cate):
             product_list = get_products_url(driver, link)
             database.update_with_data(product_list, cate['name'])
         
-        database.remove_duplicate(cate['name'])
         print('######################################' + ' HACOM ' + ' ' + cate['name'] + ' FINISHED' + '-----' + str(len(product_list)))
         driver.quit()
         _thread.threads_status_dict[threading.current_thread()] = [0, get_list_cate_hacom, cate]
@@ -231,7 +230,7 @@ def get_products_search(driver, productName):
         # html = requests.get(cururl).text
 
         # Parse the HTML using BeautifulSoup
-        soup = BeautifulSoup(html, 'html.parser')
+        soup = BeautifulSoup(html, 'lxml')
 
         empty_divs = soup.find_all('div', {'class': 'css-447dxq'})
         if (len(empty_divs) != 0 or i > 3):
@@ -250,7 +249,7 @@ def get_products_search(driver, productName):
             # html = driver.page_source
 
             # Parse the HTML using BeautifulSoup
-            soup = BeautifulSoup(html, 'html.parser')
+            soup = BeautifulSoup(html, 'lxml')
 
             product = site_to_product(soup, link)
             products.append(product)

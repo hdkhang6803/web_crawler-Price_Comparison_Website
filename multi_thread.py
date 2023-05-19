@@ -10,11 +10,11 @@ import Scraper.phongvu_scraper as pvu
 
 web_thread_func_list = [
     hacom.get_list_hacom,
-    # pvu.get_list_pvu,
-    # tiki.get_list_tiki,
-    # fpt.get_list_fpt, 
-    # tgdd.get_list_tgdd, 
-    # cellp.get_list_cellphones
+    pvu.get_list_pvu,
+    tiki.get_list_tiki,
+    fpt.get_list_fpt, 
+    tgdd.get_list_tgdd, 
+    cellp.get_list_cellphones
 ]
 
 
@@ -39,7 +39,7 @@ def run_multi_thread_cate(database, categories, function):
 #     for t in threads:
 #         t.join()
 
-threads_status_dict = {}
+
 
 def check_running_thread_add_new(waiting_threads, running_threads, next_running_index, max_thread_per_time):
     #Start the first 4 thread
@@ -72,6 +72,8 @@ def check_running_thread_add_new(waiting_threads, running_threads, next_running_
 
         time.sleep(2.5)
 
+threads_status_dict = {}
+
 def run_threads(database, max_thread_per_time = 4):
     waiting_threads = []
     running_threads = []
@@ -84,7 +86,7 @@ def run_threads(database, max_thread_per_time = 4):
 
     check_running_thread_add_new(waiting_threads, running_threads, next_running_index, max_thread_per_time)
     
-    #Redo the thread terminated by exception
+    #Restart the thread terminated by exception
     print("################### EXCEPTION THREAD RESTART ###############")
     for thread, arg_list in threads_status_dict.items():
         if arg_list[0] == -1:

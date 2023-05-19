@@ -53,7 +53,7 @@ def scrape_all(database, cate_ = 0):
 
                 #parse the html text for content
                 html_text = browser.page_source
-                html_content = BeautifulSoup(html_text, 'html.parser')
+                html_content = BeautifulSoup(html_text, 'lxml')
 
                 # products = html_content.select(create_css_tag()) 
                 products = html_content.select('li[data-price]')
@@ -68,14 +68,17 @@ def scrape_all(database, cate_ = 0):
                     else:
                         img_link = img_tag['data-src']
                     price = product.find('a', {'class' : 'main-contain'}, {'target' : '_self'}).get('data-price')
-                    if price == None or price == 0:
+                    if (price == None or price == '0'):
                         continue
                     price = int(price.replace('.', ' ').split()[0])
 
                     product_list.append([name, price, web_url + link, img_link])
 
-                    # if 'Laptop MSI Gaming Pulse GL66 11UDK i7 11800H/16GB/512GB/4GB RTX3050Ti/144Hz/Balo/Chuột/Win10 (816VN)' in name:
-                    #     print(product)               
+                    if 'Laptop Lenovo Ideapad 3 15ITL6 i5 1135G7/8GB/512GB/Win11 (82H801P9VN)' in name:
+                        print(product)     
+                        print(web_url + link)
+                        print(name)
+                        print(price)          
                     # if 'HP Pavilion 15 eg2088TU' in name:
                     #     print(product)
                     # print(web_url + link)
@@ -86,7 +89,6 @@ def scrape_all(database, cate_ = 0):
             
             # ggs.store_in_db(product_list, cate['name'])
             database.update_with_data(product_list, cate['name'])
-            database.remove_duplicate(cate['name'])
             print('######################################' + ' THEGIOIDIDONG ' + ' ' + cate['name'] + ' FINISHED' + '-----' + str(len(product_list)))
 
         browser.quit() 
@@ -147,7 +149,7 @@ def get_list_tgdd(database):
 
 
 #     #parse the html text for content
-#     html_content = BeautifulSoup(html_text, 'html.parser')
+#     html_content = BeautifulSoup(html_text, 'lxml')
 
 #     #product = html_content.select("ul > li > a > h3") #dang bị tự bỏ bớt duplicate
 #     # products = html_content.find_all('li', {'class' : 'item __cate_44'})

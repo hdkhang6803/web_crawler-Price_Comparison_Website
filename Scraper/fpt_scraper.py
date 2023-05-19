@@ -127,7 +127,6 @@ def get_list_cate_fpt(database, cate):
                 
                 # print("\n######################################################################\n")
             database.update_with_data(product_list, cate['name'])
-        database.remove_duplicate(cate['name'])
         print('######################################' + 'FPT' + ' ' + cate['name'] + ' FINISHED' + '-----' + str(len(product_list)))
         browser.quit()
         # return product_list
@@ -263,7 +262,7 @@ def get_list_fpt(database):
 
 #             #parse the html text for content
 #             html_text = browser.page_source
-#             html_content = BeautifulSoup(html_text, 'html.parser')
+#             html_content = BeautifulSoup(html_text, 'lxml')
 
 #             # products = html_content.select(create_css_tag()) 
 #             products = html_content.select('.product-item, .cdt-product, .product__item, .cate-product')
@@ -277,7 +276,7 @@ def get_list_fpt(database):
 #                 browser.get(web_url + link)
 
 #                 #parse product HTML
-#                 product_script = BeautifulSoup(browser.page_source, 'html.parser')
+#                 product_script = BeautifulSoup(browser.page_source, 'lxml')
 #                 # print(product_script)
 
 #                 #get product info
@@ -342,7 +341,7 @@ def get_list_fpt(database):
 
 
 #     #parse the html text for content
-#     html_content = BeautifulSoup(html_text, 'html.parser')
+#     html_content = BeautifulSoup(html_text, 'lxml')
 
 #     products = html_content.select('div.row-flex > div.cdt-product:not(.product-status)')
 

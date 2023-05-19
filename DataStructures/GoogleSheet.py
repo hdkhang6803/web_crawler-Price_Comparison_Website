@@ -1,19 +1,11 @@
 from google.oauth2 import service_account
-from google.auth.transport.requests import Request
-from google.oauth2.credentials import Credentials
+# from google.auth.transport.requests import Request
+# from google.oauth2.credentials import Credentials
 # from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
-
-
-# def get_used_spreadsheet_name(cate_name, used_spreadsheet):
-#     sheet_name = cate_name
-#     if used_spreadsheet == 0:
-#         sheet_name = sheet_name + '_0'
-#     else:
-#         sheet_name = sheet_name + '_1'
 
 def get_sheet_for_scrape():
     with open("active_spreadsheet.txt", "r+") as file:
@@ -28,6 +20,7 @@ def get_active_sheet():
         return active_spreadsheet
 
 class GoogleSheet:
+    
     categories_id = {
         "Laptop": 679621757,
         "Desktop": 885273009,
@@ -82,6 +75,7 @@ class GoogleSheet:
 
     def remove_duplicate(self, category):
         end_row = self.get_row_num(self.get_used_spreadsheet_name(category))
+        # print(end_row)
         sheet_id = self.get_id_of_cate(category)
         batch_update_spreadsheet_request_body = {
             "requests": [
