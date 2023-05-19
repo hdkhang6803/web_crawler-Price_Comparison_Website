@@ -439,5 +439,6 @@ body{background-color:#f8f8fc;font-family:'Roboto',sans-serif;line-height:1.25re
     padding-top: 150px;
     font-size: larger;
     background-image: linear-gradient(to top, rgba(255,0,0,0), #ffffff);
+    margin-top: 7px;
 }
 
