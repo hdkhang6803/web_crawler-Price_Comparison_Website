@@ -417,3 +417,16 @@ body{background-color:#f8f8fc;font-family:'Roboto',sans-serif;line-height:1.25re
     width: 70%;
 }
 
+#no-result-icon {
+    padding: 30px;
+}
+
+#no-product-found {
+    text-align: center;
+    height: 495px;
+    border-radius: 5px;
+    padding-top: 150px;
+    font-size: larger;
+    background-image: linear-gradient(to top, rgba(255,0,0,0), #ffffff);
+}
+
