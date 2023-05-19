@@ -166,8 +166,6 @@ class GoogleSheet:
         sheet_metadata = self.service.spreadsheets().get(spreadsheetId=self.id).execute()
         sheet_properties = sheet_metadata['sheets']
         
-        # ?????
-        # sheet_name_to_del_list = ["Laptop", "Desktop", "LinhKien", "PhuKien"]
         sheet_name_to_del_list = list(self.categories_id.keys())
         
         sheet_name_to_del_list = [self.get_used_spreadsheet_name(sheet_name) for sheet_name in sheet_name_to_del_list]
@@ -190,45 +188,3 @@ class GoogleSheet:
             except HttpError as e:
                 print(
                     f"Error clearing values in sheet {sheet_name} (id {sheet_id}): {e}")
-# The ID and range of a sample spreadsheet.
-# RANGE_NAME = 'A1:A10'
-
-
-# # Call the Sheets API
-# sheet = service.spreadsheets()
-# result = sheet.values().get(spreadsheetId=spreadsheet_id,
-#                             range=RANGE_NAME).execute()
-# values = result.get('values', [])
-# print(values)
-# print(result)
-
-
-# DEAD CODE DONT WANT TO DELETE
-# import gspread
-# from oauth2client.service_account import ServiceAccountCredentials
-
-# use creds to create a client to interact with the Google Drive API
-# scope = ['https://www.googleapis.com/auth/spreadsheets']
-# scope = [
-#     'https://www.googleapis.com/auth/spreadsheets',
-#     'https://www.googleapis.com/auth/drive'
-# ]
-
-# creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
-
-
-# if not values:
-#     print('No data found.')
-
-# print('Name, Major:')
-# for row in values:
-#     # Print columns A and E, which correspond to indices 0 and 4.
-#     print('%s, %s' % (row[0], row[4]))
-# client = gspread.authorize(creds)
-
-# sheet = client.open("Product database").sheet1
-
-# row = ["We","LOVE","COUPLER"]
-# index = 1
-# sheet.insert_row(row, index)
-# sheet.insert_row(row, index+1)
