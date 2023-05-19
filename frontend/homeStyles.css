@@ -22,31 +22,17 @@
 }
 
 #heading1 {
-    top: 25%;
+    top: 40%;
     color: #ffffff;
 }
 
 #heading2 {
-    top: 35%;
+    top: 50%;
     color: #fd390d;
 }
 
 .grp {
     margin-right: 15%;
-}
-
-#grp1 {
-    position: absolute;
-    top: 50%;
-    left: 53%;
-    width: 400px;
-}
-
-#grp2 {
-    position: absolute;
-    top: 60%;
-    left: 53%;
-    width: 400px;
 }
 
 .grpbtn {
@@ -470,10 +456,4 @@ body{background-color:#f8f8fc;font-family:'Roboto',sans-serif;line-height:1.25re
 .css-9p27dv:focus{outline:none;}
 .css-59wb59{margin:0px;padding:0px;border-style:none;border-width:1px;border-color:unset;opacity:1;color:inherit;font-weight:500;text-decoration:unset;line-height:24px;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:unset;max-width:unset;min-width:unset;transition:color 0.3s ease 0s;font-size:14px;}
 .css-157jl91{position:absolute;top:0;right:0;bottom:0;left:0;overflow:hidden;z-index:0;border-radius:inherit;}
-
-.productInfo {
-    float: left; 
-    margin: 10px; 
-    width: 70%;
-}
 
