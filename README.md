@@ -13,7 +13,7 @@ The development of the website will involve several key components, including a 
 
 ## **III. How to run:**
 To run the website and schedule the task, the following steps must be followed:
-* 1. Clone the source code to the local workspace.
+1. Clone the source code to the local workspace.
 2. In the source code, run the scheduler.py file and enter the wanted time at which the crawler task will start. If the success message appears, the task is scheduled in Windows Task Scheduler.
 3. Accessing the URL: http://shopaholic.pythonanywhere.com/ to access the price comparison website and experience the web.
 4. To run the crawler immediately without waiting for the scheduled time to come, open Windows Task Scheduler, navigate to the CrawlerTask, and click Run. Another way is to run the main.py file.
